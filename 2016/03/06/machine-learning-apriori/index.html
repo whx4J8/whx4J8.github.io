@@ -1,0 +1,728 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="简介用户一次购买的过程其实包含了许多机器学习的应用，包括物品的展示方式、购物后优惠卷的提供等等。通过查看哪些商品经常在一起被购买，帮助了解用户的购买行为，这种从大规模数据集中寻找物品间的隐含关系被称作关联分析或者关联规则学习。而apriori就是对其思想的算法实现。
+有个比较有名的故事：尿布和啤酒。美国的主妇会在丈夫下班时嘱咐他们帮孩子买尿布。店长发现男人们在买尿布的时候还会买啤酒，然后他们就把尿">
+<meta property="og:type" content="article">
+<meta property="og:title" content="machine learning - apriori">
+<meta property="og:url" content="http://yoursite.com/2016/03/06/machine-learning-apriori/index.html">
+<meta property="og:site_name" content="学而后知不足">
+<meta property="og:description" content="简介用户一次购买的过程其实包含了许多机器学习的应用，包括物品的展示方式、购物后优惠卷的提供等等。通过查看哪些商品经常在一起被购买，帮助了解用户的购买行为，这种从大规模数据集中寻找物品间的隐含关系被称作关联分析或者关联规则学习。而apriori就是对其思想的算法实现。
+有个比较有名的故事：尿布和啤酒。美国的主妇会在丈夫下班时嘱咐他们帮孩子买尿布。店长发现男人们在买尿布的时候还会买啤酒，然后他们就把尿">
+<meta property="og:image" content="http://yoursite.com/images/zuhe_shu.jpg">
+<meta property="og:image" content="http://yoursite.com/images/zuhe_shu_use.jpg">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609110737296">
+<meta property="og:image" content="http://yoursite.com/images/zuhe_shu_guize.jpg">
+<meta property="og:updated_time" content="2016-06-12T23:40:15.044Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="machine learning - apriori">
+<meta name="twitter:description" content="简介用户一次购买的过程其实包含了许多机器学习的应用，包括物品的展示方式、购物后优惠卷的提供等等。通过查看哪些商品经常在一起被购买，帮助了解用户的购买行为，这种从大规模数据集中寻找物品间的隐含关系被称作关联分析或者关联规则学习。而apriori就是对其思想的算法实现。
+有个比较有名的故事：尿布和啤酒。美国的主妇会在丈夫下班时嘱咐他们帮孩子买尿布。店长发现男人们在买尿布的时候还会买啤酒，然后他们就把尿">
+<meta name="twitter:image" content="http://yoursite.com/images/zuhe_shu.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/03/06/machine-learning-apriori/"/>
+
+  <title> machine learning - apriori | 学而后知不足 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">学而后知不足</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                machine learning - apriori
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-06T22:58:16+08:00" content="2016-03-06">
+              2016-03-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>用户一次购买的过程其实包含了许多机器学习的应用，包括物品的展示方式、购物后优惠卷的提供等等。通过查看哪些商品经常在一起被购买，帮助了解用户的购买行为，这种从大规模数据集中寻找物品间的隐含关系被称作<strong>关联分析</strong>或者<strong>关联规则学习</strong>。而<strong>apriori</strong>就是对其思想的算法实现。</p>
+<p>有个比较有名的故事：尿布和啤酒。美国的主妇会在丈夫下班时嘱咐他们帮孩子买尿布。店长发现男人们在买尿布的时候还会买啤酒，然后他们就把尿布和啤酒摆在一起。这样做之后大大增加了店里的尿布和啤酒的销量。</p>
+<p>这其实就是基于关联规则分析购物篮数据。</p>
+<p>问题来了。<br>如何确定哪些商品经常被用户一次同时购买？<br>哪写商品一起做促销更能让用户购买呢？</p>
+<h2 id="关联分析"><a href="#关联分析" class="headerlink" title="关联分析"></a>关联分析</h2><p><strong>频繁项集</strong>：在事务数据集合中经常出现一起的物品的集合({牛奶，面包})，生成条件：支持度大于最小支持度</p>
+<p><strong>支持度</strong>：数据集中包含该项集的记录所占的比例。下图来说，{牛奶,面包}有2条记录包含，所以这个项集的支持度就是2/5。支持度代表项集出现的概率，概率的较低的数据不具备代表性，将被过滤。</p>
+<p><strong>最小支持度</strong>：支持度的阀值，小于最小支持度的项集不能算是频繁的</p>
+<p><strong>关联规则</strong>：物品之间存在很强的关系({牛奶}-&gt;{面包}表示购买牛奶的人很有可能再购买面包)，而关联规则就是我们需要的结果－物品间的强关系，生成条件：规则的置信度大于最小置信度</p>
+<p><strong>置信度</strong>：是针对关联规则来定义的。拿{牛奶}-&gt;{面包}举例子，这条规则代表如果买了牛奶，就有可能还会买面包。在概率论里的意思就是当事件发生X(牛奶)的时候，计算发生Y(面包)的概率，也就是条件概率p(y|x) = p(xy)/p(x)，也就是xy同时发生的概率/x发生的概率。用下图举例子就是用户在购买牛奶的时候再次购买面包的概率是：用户同时购买牛奶和面包的概率，除用户仅购买的面包的概率。</p>
+<p><strong>最小置信度</strong>：置信度的阀值</p>
+<p>如果没有支持度，看栗子中的面包和黄油。购买面的时候再次购买黄油的概率为100%，但是并不能说是一条强规则，因为他们本身在一起的发生的概率就很低，所以需要被过滤。如果没有置信度，就不能分辨出一条规则if then的强度。我们需要的是哪些频度高强度高的规则，这样推荐物品用户才能被吸引。</p>
+<p>用下面这5个事务集合做解释(1表示购买,0表示未购买)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">transaction ID</th>
+<th style="text-align:center">牛奶</th>
+<th style="text-align:center">面包</th>
+<th style="text-align:center">黄油</th>
+<th style="text-align:center">啤酒</th>
+<th style="text-align:center">尿布</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关联规则的挖掘步骤</strong>：</p>
+<pre><code>根据事务数据找出所有的频繁项集
+依据频繁项集产生强关联规则
+</code></pre><h2 id="Apriori原理"><a href="#Apriori原理" class="headerlink" title="Apriori原理"></a>Apriori原理</h2><p>现在有了支持度、置信度，但是该如何高效的找出频繁项集呢？如图所示，这里有{0,1,2,3}4中商品，假如现在我们需要找到{0}的支持度，需要先遍历所有交易的记录，如果记录包含这条项集则count＋1，用count/记录总数得到支持度，若大于最小支持度则为频繁项集。</p>
+<p>这只是其中的一组数据，图中有个4个商品，若需要全部的频繁项集，需要对项集全部组合方式，有15种，N种商品就会有2的N次方－1种组合方式，商品的增长会造成组合数的急剧上增，而且大多数是无效数据。</p>
+<p><img src="/images/zuhe_shu.jpg" alt="全组合形式"></p>
+<p>使用apriori减少生成的无效数据<br>apriori定理：</p>
+<pre><code>如果某个项集是频繁的，那么的他的子集也必然是频繁的。
+    ps:若{0,1,3}的概率大于最小支持度，那么子集{0,3}的概率必然大于最小支持度
+
+相反，如果某个项集是非频繁的，那么他的超集也必然是非频繁的。
+    ps:若{2,3}的概率小于最小支持度，那么超集{1,2,3}的概率必然小于最小支持度
+</code></pre><p>算法原理：<br>首先扫描数据集，生成单个物品的项集列表，计算每个项集的支持度，将哪些不满足最小支持度的项集过滤掉。得到一阶频繁项集，再对一阶频繁项集组合生成二阶候选项集，以此类推直到不能再生成项集或者，阶级为项集中物品的数量</p>
+<p><img src="/images/zuhe_shu_use.jpg" alt="全组合形式"></p>
+<h4 id="查找频繁项集"><a href="#查找频繁项集" class="headerlink" title="查找频繁项集"></a>查找频繁项集</h4><pre><code>扫描所有的记录：
+扫描所有的候选项集：
+    如果候选项集时纪录的子集，增加候选项集的count，表明纪录包含该候选项集的个数
+扫描所有的候选项集：
+    若候选项集的支持度大于最小支持度，则为频繁项集，保留
+返回频繁项目集
+</code></pre><p>完整的查找频繁项集：</p>
+<pre><code>当前频繁项集不为空
+    构建一个（k+1阶）组成的候选项集列表        连接
+    判断每个项集是否频繁的                    剪枝
+    保留(k+1阶)频繁项集
+</code></pre><p>概念不好理解，这里盗个图，如图查找频繁项目集全过程：<br><img src="http://img.blog.csdn.net/20130609110737296" alt="计算频繁项集全过程"></p>
+<h4 id="计算关联规则"><a href="#计算关联规则" class="headerlink" title="计算关联规则"></a>计算关联规则</h4><p>已经得到所有的频繁项集了，如何从一个频繁项目集可以产生关联规则呢，用{0,1,2,3}这个项集来举例，可以得到如下图15种组合方式的关联规则<br>类似查找频繁项集的原理，如果123-&gt;0小于最小置信度，那么该规则的所有子集也会小于最小置信度<br>123-&gt;0 的置信度 ＝ p(0|123) = p(0123)/p(123)<br>23-&gt;01 的置信度 ＝ p(23|01) = p(0123)/p(23)<br>13-&gt;02 的置信度 ＝ p(02|13) = p(0123)/p(13)<br>12-&gt;03 的置信度 ＝ p(03|12) = p(0123)/p(12)</p>
+<p>若p(0123)/p(123)小于置信度则p(0123)/p(23)必然小于置信度,因为p(23)&gt;=p(123)<br>所以根据这个原理减少频繁项集生成无用的关联规则</p>
+<p><img src="/images/zuhe_shu_guize.jpg" alt="全组合形式"></p>
+<h2 id="Apriori实现"><a href="#Apriori实现" class="headerlink" title="Apriori实现"></a>Apriori实现</h2><h4 id="查找频繁项集-1"><a href="#查找频繁项集-1" class="headerlink" title="查找频繁项集"></a>查找频繁项集</h4><pre><code>def apriori(dataSet, minSupport=0.5):
+    largeSet = {}                                                           # 总的频繁项集
+    largeSupport = {}                                                       # 总的支持度
+
+    c1 = createC1(dataSet)                                                  # 创建一阶候选集
+    l1, supportData = scan(map(set, dataSet), c1, minSupport)               # 扫描一阶频繁项集
+
+    k = 2                                                                   # 下一阶k值
+    currentLSet = l1                                                        # 当前的频繁项集
+
+    while currentLSet:
+        largeSet[k - 2] = currentLSet                                       # store 当前频繁项集
+        largeSupport = dict(largeSupport, **supportData)                    # store 当前支持度到支持度集合中
+
+        currentCSet = joinSet(currentLSet, k)                               # 获得k阶候选集
+        currentLSet, supportData = scan(dataSet, currentCSet, minSupport)   # 扫描k阶候选集,得到频繁项集
+        k += 1
+
+    return largeSet, largeSupport
+</code></pre><h4 id="计算关联规则-1"><a href="#计算关联规则-1" class="headerlink" title="计算关联规则"></a>计算关联规则</h4><pre><code>def rules(largeSet,largeSupport,minConf = 0.5):
+
+    rules = []
+    for key,value in largeSet.items()[1:]:          #从二阶频繁项集集合开始计算
+        for item in value :                         #遍历k阶的频繁项集
+            subsets = map(frozenset,subset(item))   #计算某个频繁项集的所有子项集
+            for element in subsets :                #遍历所有子项集
+                remain = item.difference(element)   #计算后置项
+                if(len(remain) &gt; 0):                #有后置项
+                    confidence = largeSupport.get(item)/largeSupport.get(element)       #计算关联关系置信度
+                    if confidence &gt; minConf:
+                        rules.append((tuple(element),tuple(remain),confidence))
+    return rules
+</code></pre><h6 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h6><pre><code>https://github.com/whx4J8/machine-learn.git
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag">#机器学习</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/05/第一篇博客/" rel="next" title="第一篇博客 hexo学习笔记">
+                <i class="fa fa-chevron-left"></i> 第一篇博客 hexo学习笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/12/scala-学习－准备环境/" rel="prev" title="scala 学习－准备环境">
+                scala 学习－准备环境 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="whx4J8" />
+          <p class="site-author-name" itemprop="name">whx4J8</p>
+          <p class="site-description motion-element" itemprop="description">github.com/whx4J8</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联分析"><span class="nav-number">2.</span> <span class="nav-text">关联分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apriori原理"><span class="nav-number">3.</span> <span class="nav-text">Apriori原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查找频繁项集"><span class="nav-number">3.0.1.</span> <span class="nav-text">查找频繁项集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算关联规则"><span class="nav-number">3.0.2.</span> <span class="nav-text">计算关联规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apriori实现"><span class="nav-number">4.</span> <span class="nav-text">Apriori实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查找频繁项集-1"><span class="nav-number">4.0.1.</span> <span class="nav-text">查找频繁项集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算关联规则-1"><span class="nav-number">4.0.2.</span> <span class="nav-text">计算关联规则</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#完整代码"><span class="nav-number">4.0.2.0.1.</span> <span class="nav-text">完整代码</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">whx4J8</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
