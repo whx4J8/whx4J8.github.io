@@ -248,6 +248,130 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/16/tcp链接端口的理解/" itemprop="url">
+                  tcp链接端口的理解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-16T22:35:05+08:00" content="2016-03-16">
+              2016-03-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/网络/" itemprop="url" rel="index">
+                    <span itemprop="name">网络</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="tcp端口"><a href="#tcp端口" class="headerlink" title="tcp端口"></a>tcp端口</h2><p>tcp中的端口，一直以为tcp的端口是个类似的实体的东西，类似于存储数据的数据包的队列那种，所以一个server的端口只能处理一个链接，当server开启listen端口后，服务器接受到链接请求，server会分配一个随机的没有用到的端口给tcp链接。但是这是错的！</p>
+<p>tcp使用本地地址和远端地址组成的4元组（目的ip，目的端口，本地ip，本地端口）来处理多个链接请求。这个端口在tcp内核中紧紧是协议中的一部分，内核中仅仅通过目的端口无法确定是哪个进程接受到请求，所以需要server端的端口才能确定和客户端的链接。另外只有处于listen状态中的进程才能接受新的链接请求。当有新的请求到达并且被接受，内核会创建一个处于estableished状态的链接，而且端口号不变与listen的端口号一致。</p>
+<p>看个🌰</p>
+<p>我们起一个服务，我这里起了个hexo服务，使用4000端口号<br>使用命令，查看链接</p>
+<pre><code>netstat -a -n -f inet
+</code></pre><p>可以看到一个处于listen的4000端口，显示本地地址*.4000， 远端地址是＊.＊，这表明可以接受任意主机的请求</p>
+<pre><code>tcp4       0      0  *.4000                 *.*                    LISTEN     
+</code></pre><p>这时候我们telnet 4000这个端口，可以看到有两个新的请求，一个本地端口4000 远端端口60352，这是server上的链接，另一个本地60352，远端4000，这是telnet客户端的链接</p>
+<pre><code>tcp4       0      0  *.4000                 *.*                    LISTEN     
+tcp4       0      0  127.0.0.1.4000         127.0.0.1.60352        ESTABLISHED
+tcp4       0      0  127.0.0.1.60352        127.0.0.1.4000         ESTABLISHED
+</code></pre><p>关于tcp的更多知识，tcp详解 18章，unix网络编程，都有对tcp进行详细的描述。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/16/hexo-next-添加为文章添加分类/" itemprop="url">
                   hexo next 为文章添加分类
                 </a>
@@ -913,7 +1037,7 @@ scala&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

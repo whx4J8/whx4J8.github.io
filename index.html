@@ -248,6 +248,141 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/16/理解flume/" itemprop="url">
+                  理解flume
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-16T18:08:00+08:00" content="2016-06-16">
+              2016-06-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/分布式服务/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式服务</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>线上使用flume同步日志到hdfs和es，一直没有机会看，现在来看下flume日志同步工具的大体设计</p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>flume 是一套分布的高可用的日志传输组件，有效的移动大量的数据。<br>flume日志设计简单、坚固、灵活。主要描述一个面向流的数据流，数据流描述一个单一的数据流的传输和处理，从数据的生成到最终目的。<br>由逻辑节点组成，可以将接受的事件转换或者聚合。逻辑节点节点链接在一起形成数据流。<br>控制这些的是master节点，一个单独的服务。记录着flume所有的物理和逻辑节点。master分配逻辑节点，并且负责所有的逻辑节点配置更新，反过来逻辑节点定期的联系master节点，所以它们可以共享信息，并且检查更新它们的配置信息</p>
+<p>典型的flume，由一组逻辑节点部署，分为三层。代理节点通常安装在产生日志的机器上，作为数据与flume的接触点，并且将数据转发到collector层，然后存储到最后的存储层。代理层可以监听系统log，或者由web服务、Hadoop产生的日志。代理产生的数据流发送给collector，collector然后讲数据汇聚成较大的流写入hdfs</p>
+<p>逻辑节点是一个非常灵活的抽象。每个逻辑节点都有2个组件，一个source源和一个sink接收器。source告诉逻辑节点那里收集数据，然后sink告诉逻辑节点发送数据到哪里。逻辑节点唯一的区别就是如何配置source和sink。它们还可以对数据进行简单的处理。在前面的例子中，collector 和 agent 运行在相同节点的软件。master分配一个配置给每个逻辑节点，一个节点的所有组件在运行时被动态分配，flume服务无需重启任何java进程的情况下它们的配置可以被修改很多次。</p>
+<p>source sink optional decorator 是强大的源语。flume保证每个流数据的属性，活着计算事件元数据，甚至产生新的事件插入到流数据中。一个逻辑节点同样可以发送数据流到多个逻辑节点。这允许多个流，每个字流可以配置不同。有可能一个流是一个集合路径，可靠的传送一个持久性存储的数据，另一个流计算轻量级的分析，提供一个报警系统。</p>
+<h3 id="可靠性"><a href="#可靠性" class="headerlink" title="可靠性"></a>可靠性</h3><p>可靠性，在不丢失数据的过程中继续传递事件。大型分布式系统可以在许多方面遭受故障，硬件、网络、内存、软件崩溃、运行缓慢。flume将容错作为核心设计。保持运行和收集数据，即使许多组件都失败了。</p>
+<p>flume保证的一个agent所接受到的数据只要保证agent node运行最后都会执行到collector，数据可以可靠的传输到最终目的地。<br>但是，可靠的交付需要相当多的资源，往往一些数据需要更强大的保证。因此flume指定三个支持的可靠级别<br>     1.端到端<br>     2.存储故障<br>     3.最大的努力</p>
+<h3 id="可靠性说明"><a href="#可靠性说明" class="headerlink" title="可靠性说明"></a>可靠性说明</h3><p>虽然flume 及其容忍机器、网络、软件故障，从来没有任何这样的100％可靠性。如果flume所安装在的机器都发生了不可逆转的破坏，水槽数据的副本都丢失了，就无法恢复了</p>
+<p>end-to-end 端到端级别的可靠性保证一旦flume一旦接受一个事件，该事件使她的断点，只要agent接受到event，将会被保持很长的时间。首先agent先写事件到硬盘的write－ahead log。如果代理崩溃或者重新启动，该事件不会被丢失。然后事件根据流程成功的发送到结束位置。一个确认ack被发送回原agent，以便他知道不需要将事件存储在磁盘上。这个可靠性水平可以承受任何数量的下游代理的故障。</p>
+<p>store on failure 失败存储级别，需要节点将数据发送给下游节点的时候返回一个ack包，保证成功。如果发送节点发现失败，他将数据存储到节点所在的硬盘上，直到下游节点的修复，或者选择另一个下游的目的地。虽然这是有效的，如果上游发送数据进程挂了，数据可能丢失。</p>
+<p>best-effort 最低的保证级别，数据从上游发送到下游节点没有任何的确认和重试交付。如果节点失败，他们发送的任何数据都会丢失。</p>
+<p>消除单点<br>尽管使用端到端级别的可靠性水平，一个flume 流如果没有任何节点处理事件也是不可能有进展的。数据将会继续被agents收集，但是代理可能无法找到一个合适数据流下游，直到找到一个合适的在线节点。为了保持高可用性，flume允许没有任何用户的干预下入，若是发送到下游失败，则就去找另外的下游节点。flume的master进程也是可以被复制的高可用的，这意味着数据层和控制层都可以容忍一些故障。</p>
+<h3 id="扩展性"><a href="#扩展性" class="headerlink" title="扩展性"></a>扩展性</h3><p>可扩展性是通过向系统中添加更多的资源来提高系统性能的能力。flume的目标是横向扩展，逐步添加更年多的机器，系统增加吞吐量能力。在flume中的一个关键性能指标是进入系统的数量或大小，并被交付。当负荷增加时，很简单，讲更多的资源添加到系统中，以增加更多的负荷量</p>
+<p>有三个独立的组件组成的flume需要有不同的方法增加可扩展性：collector层，master，storage层</p>
+<p>collector层需要能够扩展一处理大量的来自大量的代理节点的数据。通过在collector层添加更多的机器。可以增加系统的数量和最大的可用吞吐量。</p>
+<p>一个单独的collector通常可以处理许多agent节点，因为每个单独的agent产生的日志，与collector的全部带宽相比，只是非常小的一部分。因此flume平衡流分配到不同的collector节点中。flume采用随机算法均匀的分配到collector list。这会自动传播负载，而且还能保持collector失败的情况下，传播负载。</p>
+<p>由于系统中的节点增加，master节点在控制路径上的传输可能成为瓶颈。flume的master还可以通过更多的机器来支持横向扩展，虽然只是少数的商品服务器可以提供大良的节点安装。flume的master的状态保持同步和完全复制，这确保了他是容错和高度可扩展的。</p>
+<h3 id="可管理性"><a href="#可管理性" class="headerlink" title="可管理性"></a>可管理性</h3><p>可管理性是控制数据流、监控节点、修改配置，控制输出到大型系统的一个能力。手动管理源点到终点是繁琐的容易出错的，另一个主要的痛点，又可能成千上万的日志生成应用程序和服务。他是一个重要集中管理点，监测和改变数据流，以及动态处理不同条件或问题的能力。</p>
+<p>flume 的master是管理全局数据流状态的一点。痛殴master，用户可以监控流程和配置属性。master要求自动响应系统的比阿花，如负载不平衡，部分失败或者重新配置的硬件。</p>
+<p>你可以利用master重新配置节点。虽然本博客描述的是传统的三层部署的例子。节点的灵活性允许任意节点的拓扑。你可以通过主界面提交一个采用数据流规范编写的小脚本重新配置节点。</p>
+<p>你可以通过两个接口管理master：web接口或者flume的shell脚本。web接口提供交互式式的系统的状态，shell提供人工编写的脚本或机器生成的脚本管理。</p>
+<h3 id="功能扩展性"><a href="#功能扩展性" class="headerlink" title="功能扩展性"></a>功能扩展性</h3><p>可扩展性是添加性功能到系统中大的能力。可以通过增加链接到现有存储层或者数据平台的flume。通过简单的接口就可以实现，功能设计到简单组件的分离，流程规范语言，和一个简单而灵活的数据模型。</p>
+<p>flume提供特别的可靠性和资源性能的组件。一般来自从文件系统中的文件，系统日志和syslog－ng或者标准输出的一个过程。同样有很多的事件输出目的地。虽然hdfs是主要的输出地，但是事件也可以被发送到本地，或者监控和报警等渠道。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/12/idea内嵌git不可用问题解决/" itemprop="url">
                   idea内嵌git不可用问题解决
                 </a>
@@ -1573,130 +1708,6 @@ urllib.urlopen(&apos;https://www.baidu.com&apos;)
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/16/tcp链接端口的理解/" itemprop="url">
-                  tcp链接端口的理解
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-16T22:35:05+08:00" content="2016-03-16">
-              2016-03-16
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/网络/" itemprop="url" rel="index">
-                    <span itemprop="name">网络</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="tcp端口"><a href="#tcp端口" class="headerlink" title="tcp端口"></a>tcp端口</h2><p>tcp中的端口，一直以为tcp的端口是个类似的实体的东西，类似于存储数据的数据包的队列那种，所以一个server的端口只能处理一个链接，当server开启listen端口后，服务器接受到链接请求，server会分配一个随机的没有用到的端口给tcp链接。但是这是错的！</p>
-<p>tcp使用本地地址和远端地址组成的4元组（目的ip，目的端口，本地ip，本地端口）来处理多个链接请求。这个端口在tcp内核中紧紧是协议中的一部分，内核中仅仅通过目的端口无法确定是哪个进程接受到请求，所以需要server端的端口才能确定和客户端的链接。另外只有处于listen状态中的进程才能接受新的链接请求。当有新的请求到达并且被接受，内核会创建一个处于estableished状态的链接，而且端口号不变与listen的端口号一致。</p>
-<p>看个🌰</p>
-<p>我们起一个服务，我这里起了个hexo服务，使用4000端口号<br>使用命令，查看链接</p>
-<pre><code>netstat -a -n -f inet
-</code></pre><p>可以看到一个处于listen的4000端口，显示本地地址*.4000， 远端地址是＊.＊，这表明可以接受任意主机的请求</p>
-<pre><code>tcp4       0      0  *.4000                 *.*                    LISTEN     
-</code></pre><p>这时候我们telnet 4000这个端口，可以看到有两个新的请求，一个本地端口4000 远端端口60352，这是server上的链接，另一个本地60352，远端4000，这是telnet客户端的链接</p>
-<pre><code>tcp4       0      0  *.4000                 *.*                    LISTEN     
-tcp4       0      0  127.0.0.1.4000         127.0.0.1.60352        ESTABLISHED
-tcp4       0      0  127.0.0.1.60352        127.0.0.1.4000         ESTABLISHED
-</code></pre><p>关于tcp的更多知识，tcp详解 18章，unix网络编程，都有对tcp进行详细的描述。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1742,7 +1753,7 @@ tcp4       0      0  127.0.0.1.60352        127.0.0.1.4000         ESTABLISHED
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
