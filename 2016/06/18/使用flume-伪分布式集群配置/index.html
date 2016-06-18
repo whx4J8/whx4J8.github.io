@@ -1,0 +1,659 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="伪分布式搭建flume主要有0.9和1.6两个版本，这里使用0.9版本
+1.下载flume-0.9.4-cdh4.1.5
+2.解压后进入到项目目录
+3.执行bin/flume master,查看master可用http://host:35871/
+4.另启一个终端执行bin/flume node，查看agent可用http://master:35862/
+5.在http://host:35871/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用flume,伪分布式集群配置">
+<meta property="og:url" content="http://yoursite.com/2016/06/18/使用flume-伪分布式集群配置/index.html">
+<meta property="og:site_name" content="学而后知不足">
+<meta property="og:description" content="伪分布式搭建flume主要有0.9和1.6两个版本，这里使用0.9版本
+1.下载flume-0.9.4-cdh4.1.5
+2.解压后进入到项目目录
+3.执行bin/flume master,查看master可用http://host:35871/
+4.另启一个终端执行bin/flume node，查看agent可用http://master:35862/
+5.在http://host:35871/">
+<meta property="og:updated_time" content="2016-06-18T10:21:06.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用flume,伪分布式集群配置">
+<meta name="twitter:description" content="伪分布式搭建flume主要有0.9和1.6两个版本，这里使用0.9版本
+1.下载flume-0.9.4-cdh4.1.5
+2.解压后进入到项目目录
+3.执行bin/flume master,查看master可用http://host:35871/
+4.另启一个终端执行bin/flume node，查看agent可用http://master:35862/
+5.在http://host:35871/">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/18/使用flume-伪分布式集群配置/"/>
+
+  <title> 使用flume,伪分布式集群配置 | 学而后知不足 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">学而后知不足</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用flume,伪分布式集群配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-18T08:10:42+08:00" content="2016-06-18">
+              2016-06-18
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="伪分布式搭建"><a href="#伪分布式搭建" class="headerlink" title="伪分布式搭建"></a>伪分布式搭建</h3><p>flume主要有0.9和1.6两个版本，这里使用0.9版本</p>
+<pre><code>1.下载flume-0.9.4-cdh4.1.5
+2.解压后进入到项目目录
+3.执行bin/flume master,查看master可用http://host:35871/
+4.另启一个终端执行bin/flume node，查看agent可用http://master:35862/
+5.在http://host:35871/上，点config，提交一个配置
+    configure node :    master(我机器的主机名)
+    source         :    tail(&quot;/home/hadoop/flume_file/sourcefile&quot;)
+    sink           :    text(&quot;/home/hadoop/flume_file/sinkfile&quot;)
+6.回到配置主页面状态显示SUCCEEDED
+7.现在向sourcefile追加内容，echo &apos;hello world&apos; &gt;&gt; sourcefile
+8.查看同步的sinkfile，显示master [INFO Sat Jun 18 17:35:01 CST 2016] { tailSrcFile : sourcefile } hello world
+</code></pre><p>这样使用flume中的agent，没有使用到collector，在本机器同步数据。</p>
+<p>下篇测试多机部署数据同步。</p>
+<p>下面关于flume中的master、node介绍是从官方文档翻译的，水平很有限，如有问题请见谅并指出<a href="https://github.com/whx4J8/whx4j8.github.io" target="_blank" rel="external">https://github.com/whx4J8/whx4j8.github.io</a></p>
+<h3 id="非分布式模式"><a href="#非分布式模式" class="headerlink" title="非分布式模式"></a>非分布式模式</h3><p>flume有两种模式：<strong>flume master</strong> 和 <strong>flume node</strong></p>
+<p>master控制节点的数据流，他是一个单一的逻辑实体，拥有全局的状态数据，并控制flume节点的数据流和监控flume 节点。flume 节点作为事件流的数据路径，它们可以是事件数据的来源、管道、和消费者。节点周期性的与master发送一个心跳，并获取它们的数据流配置。</p>
+<h3 id="flume-master"><a href="#flume-master" class="headerlink" title="flume master"></a>flume master</h3><p>master可以通过下面的命令启动</p>
+<pre><code>flume master
+</code></pre><p>然后master开始运行，你可以使用浏览器访问，<strong>localhost:35871</strong>。此网页显示与master 联系的所有的flume node的状态。并且显示当前所分配的每个node的配置，当你启动这个flume 节点运行时，状态和配置表应该是空的。<br>该网页包含四个表，这些表中的信息代表当前flume中的全局状态。</p>
+<pre><code>节点状态表
+节点配置表
+物理／逻辑节点映射表
+命令历史表
+</code></pre><p><strong>master节点状态表</strong>包含所有与master接触的flume节点的名称，和它们当前的配置版本（最初是无），它们的状态。每个flume节点的名称与Linux主机名相同。</p>
+<p><strong>master节点配置表</strong>包含节点的逻辑名称，和分配给他的版本号，和他的source和sinks的规范。最初，这表是空的，但是在你更改值之后，你可以查看网页查看更新。有两组列，用户输入的version/source/sink。</p>
+<p><strong>master物理/逻辑节点映射表</strong>包含了逻辑节点到它们的物理节点的映射。</p>
+<p><strong>master命令历史记录表</strong>包含命令的状态。在一般的情况下，命令修改master全局状态。命令在master上被处理，并且分配一个唯一的命令标示号，每个命令有一个状态（成功、失败、挂起），一个命令行和一个尝试执行的消息。</p>
+<h3 id="flume-node"><a href="#flume-node" class="headerlink" title="flume node"></a>flume node</h3><p>要启动flume node ， 在另一个终端执行命令</p>
+<pre><code>flume node_nowatch
+</code></pre><p>检查flume node，访问<strong>localhost:35862</strong>。每个节点在一个表上显示自己的数据，包括关于节点的诊断、统计数据、数据流和正在运行所在机器的系统度量。如果你有多个flume程序运行在一台机器上，他会自动的递增端口号，并尝试绑定下一个端口号，记录最终的选定的端口。</p>
+<p>如果node已经运行，你应该重新刷新master 状态页，确保node与master联通。如果你新加入一个节点，你应该在主节点状态表中看到一个新的节点，在逻辑节点映射表中有一个新的条目，将逻辑节点关联物理节点。</p>
+<h3 id="通过flume-master-配置-node"><a href="#通过flume-master-配置-node" class="headerlink" title="通过flume master 配置 node"></a>通过flume master 配置 node</h3><p>node节点可以与master接触，master可以得到她们的配置。使你可以不需要登录到远程机器修改配置后重启守护进程。你可以快速更改节点以前的数据流。</p>
+<p>在master的页面，点击config连接。你有两种形式。这些都是web接口配置node 数据流。当flume node 连接到master，将被通知数据流version已经改变了，然后重新实例化，并且激活配置。</p>
+<p>对于这个例子，可以在 configure a single node 中输入值，并且提交。</p>
+<p>刷新master的页面，注意version、source、sink的改变。状态更新位active，他已经准备接受控制台数据了。<br>在master，一个节点可以有几种状态</p>
+<pre><code>hello:一个新的node实例连接到master
+idle:一个节点刚刚完成配置或者没有配置
+configuring:一个节点已经收到一个配置，并且正在激活配置
+active:一个节点正在积极的从源中提取数据，并且讲数据推到sink中
+lost:节点与master失去联系
+decommissioned:一个节点被故意退役从集群中
+error:异常
+</code></pre><p> 常见的配置</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">配置</th>
+<th style="text-align:center">node name</th>
+<th style="text-align:center">source</th>
+<th style="text-align:center">sink</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">host</td>
+<td style="text-align:center">tail(“/home/hadoop/flume_file/sourcefile”)</td>
+<td style="text-align:center">console</td>
+</tr>
+</tbody>
+</table>
+<p>通过master改变系统中的不同节点的配置，从二获取从各种来源获取数据。</p>
+<h3 id="Sink-介绍"><a href="#Sink-介绍" class="headerlink" title="Sink 介绍"></a>Sink 介绍</h3><p>flume有各种各样的来源，产生或接受新的事件消息进入系统。你能限制这些消息到控制台，如你所料。flume为不同的目的地提供各种各样的事件sink。<br>许多事件的目的地，可能是本地硬盘，hdfs，控制台，转发网络接口。你使用sink作为一个接口，发送事件。</p>
+<p>通过指定中心的配置，并提交master，可以将不同的source连接到不同的sink上。</p>
+<p>flume event sinks 事件接受器</p>
+<pre><code>null                              没有，事件被删除
+console[(&quot;format&quot;)]               控制台，格式可选
+text(&quot;txtfile&quot;[,&quot;format&quot;])        文件
+dfs(&quot;dfsfile&quot;)                    分布式文件系统
+syslogTcp(&quot;host&quot;,port)            同步tcp端口
+</code></pre><h3 id="分层flume节点：agent-和-collector"><a href="#分层flume节点：agent-和-collector" class="headerlink" title="分层flume节点：agent 和 collector"></a>分层flume节点：agent 和 collector</h3><p>如果通过网络发送事件是容易的、高效的、可靠的将是非常美好的。但是现实中，从分布式机器中和网络中收集数据，将极大的增加可能发生的事故和种类。底线是通过负责的策略保证可靠性。</p>
+<p>flume 简化了这些问题，通过提供一个预定义的拓扑性和可靠性。只需要你为node节点设置一个角色。一个简单的flume node 的拓扑结构将node分为两个role。一个是flume agent 和flume collector。agent位于正在产生日志的机器上。例如你可以指定一个flume agent配置为syslogtcp为source，并且配置syslog 生成服务器发送日志到指定的本地端口。flume agent 会有一个agentSink作为他的sink配置，并且发送到collector。</p>
+<p>collector集群侦听来自多个agent的数据记录，最终写到hdfs。<br>为了演示伪分布式模式下的新的sinks，你将实例化一个flume node在本地。为此，你需要在开始时配置一些额外的参数。下面的命令行启动一个物理节点名为collector</p>
+<pre><code>flume node_nowatch -n collector
+</code></pre><p>在master的页面上，你最中会看到两个节点，host和collector。flume node节点状态网页。在localhost:35862 localhost:35863。</p>
+<p>端口绑定依赖实例化顺序，第一个物理节点初始化在35862、第二个初始化在35863</p>
+<p>接着，collector承担起收集器的角色，通过使用聚集多配置的方式，数据从控制台发送到collector中。将agent使用agentsink，一个高可靠的网络sink。collector 节点的source配置为collectorSource同时他的source配置为console</p>
+<pre><code>host : console | agentSink(&quot;localhost&quot;,35853) ;
+collector : collectorSource(35853) | console ;
+</code></pre><p>当你在终端输入，事件被发送到collector。现在当消息到达collector时，大概有一定的延迟15s左右，这实际上是一个可配置的默认的设置的值，但测试时同步的延迟没有这么高。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/16/理解flume/" rel="next" title="理解flume">
+                <i class="fa fa-chevron-left"></i> 理解flume
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="whx4J8" />
+          <p class="site-author-name" itemprop="name">whx4J8</p>
+          <p class="site-description motion-element" itemprop="description">github.com/whx4J8</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#伪分布式搭建"><span class="nav-number">1.</span> <span class="nav-text">伪分布式搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非分布式模式"><span class="nav-number">2.</span> <span class="nav-text">非分布式模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flume-master"><span class="nav-number">3.</span> <span class="nav-text">flume master</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flume-node"><span class="nav-number">4.</span> <span class="nav-text">flume node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过flume-master-配置-node"><span class="nav-number">5.</span> <span class="nav-text">通过flume master 配置 node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sink-介绍"><span class="nav-number">6.</span> <span class="nav-text">Sink 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分层flume节点：agent-和-collector"><span class="nav-number">7.</span> <span class="nav-text">分层flume节点：agent 和 collector</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">whx4J8</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
