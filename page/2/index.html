@@ -248,6 +248,109 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/02/python-无法安装setuptools问题/" itemprop="url">
+                  python 无法安装setuptools问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-02T18:43:19+08:00" content="2016-04-02">
+              2016-04-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Python无法安装setuptools解决"><a href="#Python无法安装setuptools解决" class="headerlink" title="Python无法安装setuptools解决"></a>Python无法安装setuptools解决</h2><p>centos6.5阿里云的新机器，更新python版本之后安装setuptools，但是一直报错。说不能解析https,也ping不同这个其中报错的https网址</p>
+<p>查看之后发现是python内置的urllib模块不支持https协议，是因为安装python之前没有编译openssl 这样的ssl库,以至于python不支持ssl</p>
+<pre><code>yum install openssl-devel
+</code></pre><p>找到python的安装目录，重新编译python</p>
+<pre><code>./configure
+make
+make install
+</code></pre><p>测试</p>
+<pre><code>import urllib
+urllib.urlopen(&apos;https://www.baidu.com&apos;)
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/27/tcp详解学习笔记-tcp建立终止/" itemprop="url">
                   tcp详解学习笔记-tcp建立终止
                 </a>
@@ -1156,7 +1259,7 @@ scala&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1173,7 +1276,7 @@ scala&gt;
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

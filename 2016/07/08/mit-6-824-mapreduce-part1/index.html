@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="读书笔记," />
+  <meta name="keywords" content="mapreduce," />
 
 
 
@@ -84,19 +84,25 @@
 
 
 
-<meta name="description" content="复用建议：组合优先于继承如果需要复用代码，我们第一想到的是使用继承，但是这只是面向对象的一种复用方式－ 白盒复用。子类继承父类，父类中的实现对子类可见，若是父类的实现代码改变，子类代码也就需要跟着改变。另一种方式，对象组合－黑盒复用。对象组合要求对象之间定义好接口，相互之间使用接口引用。对象内部的实现是不可见的。
-因为继承父类，父类的实现对子类完全可见甚至可改变，所以父类中的任何一个改变都有可能影">
+<meta name="description" content="最近忙着工作上的事，看书看论文的时间也少了，周五啦放松下，把最近做的分布式课程梳理下。
+之前一直在做麻省理工大学的分布式课程mit 6.824虽然一直做，但也只是做了个lab1中的前两个part
+关于map reduce ，论文太多了。google的官方论文
+part1 单机版顺序map reducemit给了部分map reduce执行的代码，包括测试用例，单机的多机的，任务失败的，不得不说，看">
 <meta property="og:type" content="article">
-<meta property="og:title" content="effective java 读书笔记-类和接口">
-<meta property="og:url" content="http://yoursite.com/2016/04/09/effective-java-读书笔记-类和接口/index.html">
+<meta property="og:title" content="mit 6.824 mapreduce part1">
+<meta property="og:url" content="http://yoursite.com/2016/07/08/mit-6-824-mapreduce-part1/index.html">
 <meta property="og:site_name" content="学而后知不足">
-<meta property="og:description" content="复用建议：组合优先于继承如果需要复用代码，我们第一想到的是使用继承，但是这只是面向对象的一种复用方式－ 白盒复用。子类继承父类，父类中的实现对子类可见，若是父类的实现代码改变，子类代码也就需要跟着改变。另一种方式，对象组合－黑盒复用。对象组合要求对象之间定义好接口，相互之间使用接口引用。对象内部的实现是不可见的。
-因为继承父类，父类的实现对子类完全可见甚至可改变，所以父类中的任何一个改变都有可能影">
-<meta property="og:updated_time" content="2016-06-12T23:40:14.140Z">
+<meta property="og:description" content="最近忙着工作上的事，看书看论文的时间也少了，周五啦放松下，把最近做的分布式课程梳理下。
+之前一直在做麻省理工大学的分布式课程mit 6.824虽然一直做，但也只是做了个lab1中的前两个part
+关于map reduce ，论文太多了。google的官方论文
+part1 单机版顺序map reducemit给了部分map reduce执行的代码，包括测试用例，单机的多机的，任务失败的，不得不说，看">
+<meta property="og:updated_time" content="2016-07-08T15:20:50.305Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="effective java 读书笔记-类和接口">
-<meta name="twitter:description" content="复用建议：组合优先于继承如果需要复用代码，我们第一想到的是使用继承，但是这只是面向对象的一种复用方式－ 白盒复用。子类继承父类，父类中的实现对子类可见，若是父类的实现代码改变，子类代码也就需要跟着改变。另一种方式，对象组合－黑盒复用。对象组合要求对象之间定义好接口，相互之间使用接口引用。对象内部的实现是不可见的。
-因为继承父类，父类的实现对子类完全可见甚至可改变，所以父类中的任何一个改变都有可能影">
+<meta name="twitter:title" content="mit 6.824 mapreduce part1">
+<meta name="twitter:description" content="最近忙着工作上的事，看书看论文的时间也少了，周五啦放松下，把最近做的分布式课程梳理下。
+之前一直在做麻省理工大学的分布式课程mit 6.824虽然一直做，但也只是做了个lab1中的前两个part
+关于map reduce ，论文太多了。google的官方论文
+part1 单机版顺序map reducemit给了部分map reduce执行的代码，包括测试用例，单机的多机的，任务失败的，不得不说，看">
 
 
 
@@ -117,9 +123,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/04/09/effective-java-读书笔记-类和接口/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/08/mit-6-824-mapreduce-part1/"/>
 
-  <title> effective java 读书笔记-类和接口 | 学而后知不足 </title>
+  <title> mit 6.824 mapreduce part1 | 学而后知不足 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -249,7 +255,7 @@
             
             
               
-                effective java 读书笔记-类和接口
+                mit 6.824 mapreduce part1
               
             
           </h1>
@@ -261,8 +267,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-09T20:19:43+08:00" content="2016-04-09">
-              2016-04-09
+            <time itemprop="dateCreated" datetime="2016-07-08T22:41:33+08:00" content="2016-07-08">
+              2016-07-08
             </time>
           </span>
 
@@ -275,8 +281,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
+                  <a href="/categories/分布式服务/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式服务</span>
                   </a>
                 </span>
 
@@ -308,9 +314,19 @@
       
 
       
-        <h4 id="复用建议：组合优先于继承"><a href="#复用建议：组合优先于继承" class="headerlink" title="复用建议：组合优先于继承"></a>复用建议：组合优先于继承</h4><p>如果需要复用代码，我们第一想到的是使用继承，但是这只是面向对象的一种复用方式－ 白盒复用。<br>子类继承父类，父类中的实现对子类可见，若是父类的实现代码改变，子类代码也就需要跟着改变。<br>另一种方式，对象组合－黑盒复用。对象组合要求对象之间定义好接口，相互之间使用接口引用。对象内部的实现是不可见的。</p>
-<p>因为继承父类，父类的实现对子类完全可见甚至可改变，所以父类中的任何一个改变都有可能影响到子类，这样破坏了封装性，代码非常脆弱。<br>而使用组合的方式，对象之间使用接口的方式进行调用。接口的实现改变了，但并不影响接口外部的调用，这样的代码非常稳固，复用性高</p>
-<p>使用原则：大多数情况下，组合方式优先于继承，使用这种方式的代码更容易维护。</p>
+        <p>最近忙着工作上的事，看书看论文的时间也少了，周五啦放松下，把最近做的分布式课程梳理下。</p>
+<p>之前一直在做麻省理工大学的分布式课程mit 6.824<br>虽然一直做，但也只是做了个lab1中的前两个part</p>
+<p>关于map reduce ，论文太多了。<br><a href="https://www.google.co.jp/url?sa=t&rct=j&q=&esrc=s&source=web&cd=4&ved=0ahUKEwiZ7qSUjuTNAhUFG5QKHaeXAN0QFgg3MAM&url=http%3A%2F%2Fresearch.google.com%2Farchive%2Fmapreduce-osdi04.pdf&usg=AFQjCNEL7nTxrQ6fiMUtt4AZh6gK5og2IQ&sig2=zGVJeyzqf4lryYhPlCqGkg" target="_blank" rel="external">google的官方论文</a></p>
+<h3 id="part1-单机版顺序map-reduce"><a href="#part1-单机版顺序map-reduce" class="headerlink" title="part1 单机版顺序map reduce"></a>part1 单机版顺序map reduce</h3><p>mit给了部分map reduce执行的代码，包括测试用例，单机的多机的，任务失败的，不得不说，看看人家写的代码很有帮助，自己写的golang实在是搓。</p>
+<h5 id="1-doMap-函数"><a href="#1-doMap-函数" class="headerlink" title="1.doMap 函数"></a>1.doMap 函数</h5><p>doMap函数:根绝master调用的输入文件，调用用户定义的map函数，然后将结果分区写到不同的out put file上。</p>
+<p>如何分区，这个一开始没写好，一直测试不过，因为一次map reduce任务，有m个map任务，map任务取决于hdfs上block，n个reduce任务，这个取决于如何分区，这里没给分区函数，但测试用例初始化master的时候，file的个数决定map的个数，reduce的个数取决于给定的数量。</p>
+<p>使用很简单的分区方式，对key进行hash后/reduce个数n取余<br>也就是hash(key)%nReduce得到分区文件</p>
+<p>结果存储没啥好说的，一开始的建议是直接将输出的key value以json的形势存储文件，比较期待后边的倒排索引如何实现。</p>
+<h5 id="2-doReduce-函数"><a href="#2-doReduce-函数" class="headerlink" title="2.doReduce 函数"></a>2.doReduce 函数</h5><p>doReduce函数:根据master的调用，拿到属于该reduce任务的分区文件，也就是hash(key)%nReduce，得到该分区下的所有的map函数产生的数据文件，读取合并排序后调用reduce函数，得到output key value ，json格式写文件。完活</p>
+<h5 id="3-merge-函数"><a href="#3-merge-函数" class="headerlink" title="3.merge 函数"></a>3.merge 函数</h5><p>merge函数是mit给的，没有细看，大概就是把每个reduce，按照reduce的分区顺序合并，写入最后的结果文件中。</p>
+<p>整体把map reduce的单机流程理清，最重要的还是如何实现分布式啦，如何处理map或者reduce函数的失败，hdfs的失败。</p>
+<h3 id="part2-单机的word-count"><a href="#part2-单机的word-count" class="headerlink" title="part2 单机的word count"></a>part2 单机的word count</h3><p>根据刚才已经实现的map reduce框架，自己写map函数和reduce函数，有10多个文件，和测试代码，很简单与预计结果相同啦</p>
+<h3 id="part3-分布式map-reduce"><a href="#part3-分布式map-reduce" class="headerlink" title="part3 分布式map reduce"></a>part3 分布式map reduce</h3><p>// TODO:</p>
 
       
     </div>
@@ -332,7 +348,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/读书笔记/" rel="tag">#读书笔记</a>
+            <a href="/tags/mapreduce/" rel="tag">#mapreduce</a>
           
         </div>
       
@@ -341,17 +357,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/09/dapper-的学习/" rel="next" title="dapper 的学习">
-                <i class="fa fa-chevron-left"></i> dapper 的学习
+              <a href="/2016/06/18/使用flume-伪分布式集群配置/" rel="next" title="使用flume,伪分布式集群配置">
+                <i class="fa fa-chevron-left"></i> 使用flume,伪分布式集群配置
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/16/Hadoop安装-准备环境/" rel="prev" title="Hadoop安装-准备环境">
-                Hadoop安装-准备环境 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -465,7 +477,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#复用建议：组合优先于继承"><span class="nav-number">1.</span> <span class="nav-text">复用建议：组合优先于继承</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#part1-单机版顺序map-reduce"><span class="nav-number">1.</span> <span class="nav-text">part1 单机版顺序map reduce</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-doMap-函数"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.doMap 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-doReduce-函数"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.doReduce 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-merge-函数"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.merge 函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part2-单机的word-count"><span class="nav-number">2.</span> <span class="nav-text">part2 单机的word count</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part3-分布式map-reduce"><span class="nav-number">3.</span> <span class="nav-text">part3 分布式map reduce</span></a></li></ol></div>
             
           </div>
         </section>
