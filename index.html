@@ -248,6 +248,137 @@
             
               
                 
+                <a class="post-title-link" href="/2016/07/19/浏览器302重定向之迷/" itemprop="url">
+                  浏览器302重定向之迷
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-19T23:39:29+08:00" content="2016-07-19">
+              2016-07-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/线上bug解决/" itemprop="url" rel="index">
+                    <span itemprop="name">线上bug解决</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="事故"><a href="#事故" class="headerlink" title="事故"></a>事故</h4><p>晚上9点左右忽然爆出线上支付宝wap拉不起来。<br>场景：h5页面点击确认支付，不能拉起支付，<br>      但是直接拿到确认支付的请求，放在浏览器中可以拉起支付。</p>
+<h4 id="排查原因"><a href="#排查原因" class="headerlink" title="排查原因"></a>排查原因</h4><p>先看了预支付请求对接部门的返回，正常的结果。</p>
+<p>不知道原因，但是看到不能拉起支付的请求，是同时请求了支付两次，而且302跳转不正常。<br>显示异常</p>
+<pre><code>XMLHttpRequest cannot load ****支付url**** 
+&apos;control-allow-origin&apos; header is present on the requested resource
+</code></pre><p>查了下，是js跨域的异常，这时估计是什么原因导致浏览器302重定向失败了。也不知道为啥。</p>
+<p>正常的支付流程</p>
+<pre><code>    request                                      response
+
+1.前端请求支付链接请求                        
+                                            302响应，带着对接部门的支付链接
+2.浏览器拿到302，请求对接部门支付链接        
+                                            302响应，带着支付宝wap的支付链接
+3.浏览器拿到302，请求支付宝wap的支付链接
+                                            返回支付页面
+</code></pre><p>现在流程2就爆出跨域问题了。。<br>怀疑同时请求两次导致的，直接将支付链接扔到浏览器上，查看浏览器请求，一次支付请求，重定向正常，拉起支付。</p>
+<p>点击确认支付，同时请求两次支付请求，重定向异常，显示跨域异常，不能拉起支付。</p>
+<p>找到问题所在。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>现在还不知道什么原因导致的，同时请求相同的302浏览器重定向失败。<br>明明好好查下。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/08/mit-6-824-mapreduce-part1/" itemprop="url">
                   mit 6.824 mapreduce part1
                 </a>
@@ -1661,149 +1792,6 @@ span会在sc这个事件中被创建,并且存活于threadlocal中,在ss这个�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/05/effective-java读书笔记-静态工厂/" itemprop="url">
-                  effective java读书笔记-静态工厂
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-05T22:32:36+08:00" content="2016-04-05">
-              2016-04-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="静态工厂方法-static-method-factory"><a href="#静态工厂方法-static-method-factory" class="headerlink" title="静态工厂方法 static method factory"></a>静态工厂方法 static method factory</h4><p>静态工厂是effective java 中的第一节，本文大部分内容是从上面摘抄的。<br>static method factory 译为静态工厂模式，指的是类可以提供一个静态工厂方法，一个返回类的实例的静态方法。</p>
-<pre><code>public static final Boolean FALSE = new Boolean(false);
-public static final Boolean TRUE = new Boolean(true);
-
-public static Boolean valueOf(boolean b) {
-    return (b ? TRUE : FALSE);
-}
-
-public Boolean(boolean value) {
-    this.value = value;
-}
-</code></pre><p>在java8 中前者为静态工厂创建对象，后者为构造方法创建对象。</p>
-<p>那么静态工厂的优点</p>
-<p>1.静态方法在方法命名上更具备可读性<br>    用构造方法创建对象的时候，传递不同的参数生成不同类型的对象。但是这并不明显，若不去查看api我们不能看出构造方法创建的到底是哪些对象。而且静态工厂可以在方法上作特征对象的命名。</p>
-<p>2.静态方法参数的灵活性<br>    与上述的优点相同，使用构造方法创建不同类型对象时会出现这样一个问题。当我们需要相同类型的参数，创建不同类型的对象，这个问题导致构造方法极其难使用。如果使用静态方法我们完全可以在方法名上进行区别。</p>
-<p>3.不必每次调用的时候都创建新的对象<br>    我们可以利用静态工厂对常用的单例的对象进行缓存。<br>    public static Boolean valueOf(boolean b) {<br>        return (b ? TRUE : FALSE);<br>    }<br>    每次调用valueOf()的时候并不会创建新的对象而是使用缓存中的Boolean对象，这样对类的实例有很好的控制权利，但是要保证类是线程安全的并且单例的。</p>
-<p>4.静态工厂可以返回<strong>类的任何子类型</strong><br>    这优点实在是太好啦，api可以返回对象，却不需要将类的构造公有化（公有化子类就可以），以这种隐藏构造子类代码的方式可以使api对外部变的非常简洁，特别适用于服务提供者框架中进行解耦。</p>
-<pre><code>private static final Map&lt;String,Provider&gt; providers = new ConcurrentHashMap&lt;String, Provider&gt;();
-static{
-    providers.put(&quot;xml&quot;,new XMLProvider());
-    providers.put(&quot;json&quot;,new JSONProvider());
-}
-
-private ServiceFactory(){
-
-}
-
-public Service getService(String type){
-    return providers.get(type).newService();
-}    
-</code></pre><p>在这个factory中，外界只需要给出需要的类型，完全不需要关注其service是如何创建的，创建何种类型，甚至可以做到外部只关注获得Service接口,外部面向接口进行编程。从而降低代码的耦合程度。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1849,7 +1837,7 @@ public Service getService(String type){
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1857,7 +1845,7 @@ public Service getService(String type){
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>

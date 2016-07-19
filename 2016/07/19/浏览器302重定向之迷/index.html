@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="读书笔记," />
+  <meta name="keywords" content="前端," />
 
 
 
@@ -84,34 +84,28 @@
 
 
 
-<meta name="description" content="On a UNIX system, everything is a file; if something is not a file, it is a process 
-文件的种类
-
-目录文件:存放其他文件的文件
-特殊文件:用于输入输出机制，大多数特殊文件在/dev中
-链接:系统使文件在系统的file tree中多处可见
-socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
+<meta name="description" content="事故晚上9点左右忽然爆出线上支付宝wap拉不起来。场景：h5页面点击确认支付，不能拉起支付，      但是直接拿到确认支付的请求，放在浏览器中可以拉起支付。
+排查原因先看了预支付请求对接部门的返回，正常的结果。
+不知道原因，但是看到不能拉起支付的请求，是同时请求了支付两次，而且302跳转不正常。显示异常
+XMLHttpRequest cannot load ****支付url**** 
+&amp;apo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux File System 总体介绍">
-<meta property="og:url" content="http://yoursite.com/2016/05/18/Linux-File-System总体介绍/index.html">
+<meta property="og:title" content="浏览器302重定向之迷">
+<meta property="og:url" content="http://yoursite.com/2016/07/19/浏览器302重定向之迷/index.html">
 <meta property="og:site_name" content="学而后知不足">
-<meta property="og:description" content="On a UNIX system, everything is a file; if something is not a file, it is a process 
-文件的种类
-
-目录文件:存放其他文件的文件
-特殊文件:用于输入输出机制，大多数特殊文件在/dev中
-链接:系统使文件在系统的file tree中多处可见
-socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
-<meta property="og:updated_time" content="2016-06-12T23:40:13.704Z">
+<meta property="og:description" content="事故晚上9点左右忽然爆出线上支付宝wap拉不起来。场景：h5页面点击确认支付，不能拉起支付，      但是直接拿到确认支付的请求，放在浏览器中可以拉起支付。
+排查原因先看了预支付请求对接部门的返回，正常的结果。
+不知道原因，但是看到不能拉起支付的请求，是同时请求了支付两次，而且302跳转不正常。显示异常
+XMLHttpRequest cannot load ****支付url**** 
+&amp;apo">
+<meta property="og:updated_time" content="2016-07-19T16:06:53.446Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux File System 总体介绍">
-<meta name="twitter:description" content="On a UNIX system, everything is a file; if something is not a file, it is a process 
-文件的种类
-
-目录文件:存放其他文件的文件
-特殊文件:用于输入输出机制，大多数特殊文件在/dev中
-链接:系统使文件在系统的file tree中多处可见
-socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
+<meta name="twitter:title" content="浏览器302重定向之迷">
+<meta name="twitter:description" content="事故晚上9点左右忽然爆出线上支付宝wap拉不起来。场景：h5页面点击确认支付，不能拉起支付，      但是直接拿到确认支付的请求，放在浏览器中可以拉起支付。
+排查原因先看了预支付请求对接部门的返回，正常的结果。
+不知道原因，但是看到不能拉起支付的请求，是同时请求了支付两次，而且302跳转不正常。显示异常
+XMLHttpRequest cannot load ****支付url**** 
+&amp;apo">
 
 
 
@@ -132,9 +126,9 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/05/18/Linux-File-System总体介绍/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/19/浏览器302重定向之迷/"/>
 
-  <title> Linux File System 总体介绍 | 学而后知不足 </title>
+  <title> 浏览器302重定向之迷 | 学而后知不足 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -264,7 +258,7 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
             
             
               
-                Linux File System 总体介绍
+                浏览器302重定向之迷
               
             
           </h1>
@@ -276,8 +270,8 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-18T18:22:39+08:00" content="2016-05-18">
-              2016-05-18
+            <time itemprop="dateCreated" datetime="2016-07-19T23:39:29+08:00" content="2016-07-19">
+              2016-07-19
             </time>
           </span>
 
@@ -290,8 +284,8 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
+                  <a href="/categories/线上bug解决/" itemprop="url" rel="index">
+                    <span itemprop="name">线上bug解决</span>
                   </a>
                 </span>
 
@@ -323,68 +317,25 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
       
 
       
-        <p> <strong>On a UNIX system, everything is a file; if something is not a file, it is a process</strong> </p>
-<h4 id="文件的种类"><a href="#文件的种类" class="headerlink" title="文件的种类"></a>文件的种类</h4><blockquote>
-<ul>
-<li>目录文件:存放其他文件的文件</li>
-<li>特殊文件:用于输入输出机制，大多数特殊文件在/dev中</li>
-<li>链接:系统使文件在系统的file tree中多处可见</li>
-<li>socket:特殊的文件类型，类似tcp socket，通过文件系统提供受保护的进程网络连接</li>
-<li>命名管道:不使用网络套接字，进程间通信的一种方式</li>
-</ul>
-</blockquote>
-<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4><p>在发生故障的情况下，硬盘被分区可以保证更高的数据安全性。通过硬盘分区，可以将数据分组分离，当事故发生，只有被命中分区的数据被破坏，其他分区的数据被保存下来。</p>
-<p>例如：若整个系统为一个分区，应用程序将分区硬盘写满了，程序不能再执行，整个系统也将停止。如果数据单独存放到一个数据分区上，受影响的也仅仅是数据分区，系统分区和其他的分区正常使用。</p>
-<p>两种分区：</p>
-<pre><code>1. 数据分区，包含启动和执行系统的根目录
-2. swap分区，扩展计算的物理内存，在硬盘上的额外内存    
-</code></pre><h5 id="数据分区"><a href="#数据分区" class="headerlink" title="数据分区"></a>数据分区</h5><p>大多数系统包含一个根分区，一个或者多个数据分区，一个或多个交换分区。并且Linux系统使用fdisk安装分区的类型。</p>
-<p>标准根分区约为100-500 MB，包含系统的配置文件，基本的命令，服务器程序，系统函数库，一些临时空间和管理用户的主目录</p>
-<p>内核是一个单独的分区，他是系统中最重要的文件。你可以查看你的/boot，用来保持内核执行，和相应的文件。</p>
-<p>硬盘的其他数据都被分在数据分区，尽管有可能仅仅是一个分区。在Linux中</p>
-<blockquote>
-<ul>
-<li>/usr 用户的程序</li>
-<li>/home 用户的个人数据</li>
-<li>/var 存储临时文件和mail队列</li>
-<li>/opt 三方或者额外的软件</li>
-</ul>
-</blockquote>
-<h5 id="swap分区"><a href="#swap分区" class="headerlink" title="swap分区"></a>swap分区</h5><p>交换空间仅适用于系统本身的访问，隐藏于正常的操作，是工作的保障。在Linux上从未看过内存已满的异常也是因为swap的功劳。<br>一般Linux在使用swap的时候，硬盘和内存的转换约为2:1。就是说一个系统如果需要512M的swap内存空间。三种方案：</p>
-<blockquote>
-<ul>
-<li>一个1g的分区</li>
-<li>2个512m的分区</li>
-<li>2个硬盘分别512m的分区</li>
-</ul>
-</blockquote>
-<p>最后的适用于大量的io操作。</p>
-<p>一旦分区创建成功，你只能添加。虽然可以改变已有的分区大小，但是并不建议<br>服务器上的往往是用户数据和系统数据分离。提供服务的程序和程序的数据分离</p>
-<h4 id="挂载点"><a href="#挂载点" class="headerlink" title="挂载点"></a>挂载点</h4><p>所有的分区通过一个挂载点连接到系统，挂载点定义在文件系统中的特定数据组的位置，通常所有的分区通过根分区链接，在这个分区中用/根目录表示。这些空目录件是链接到这些分区的起始点</p>
-<p>例如我们想将分区链接到/opt/media的目录中，首先系统中/opt/media这个目录是必须存在的，并且最好是一个空的目录，然后使用mount命令，将分区添加到系统中。当你看以前的空的目录/opt/media,会包含一些媒介的文件或者目录。</p>
-<p>在一个正在运行的系统中</p>
-<blockquote>
-<ul>
-<li>df -h    命令显示有关分区和挂载点的信息</li>
-<li>df -h .  查看自己当前目录所在的分区</li>
-</ul>
-</blockquote>
-<h4 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h4><p>每个分区都有自己的文件系统，通过想象这些文件系统连接在一起，可以看到整个系统的树状结构。<br>在一个文件系统中，一个文件由一个inode表示，一个包含文件具体信息的序列号，文件所属，文件在硬盘上的位置</p>
-<p>每个分区都有自己的索引节点，在同一个系统中的多个文件系统中，可以有相同的inode编号<br>每个inode都是描述文件在硬盘上的数据结构，存储文件的属性。包含文件数据的物理位置，当一个硬盘初始化并接受数据存储，通常在初始化安装系统或者添加额外的硬盘时候，指定固定的inode的数量，这个值限制文件的最大数量，一个inode大约2到8kb存储</p>
-<p>在创建一个文件时候，得到一个新的空闲的inode。包含信息</p>
-<blockquote>
-<ul>
-<li>文件的所有者</li>
-<li>文件类型</li>
-<li>权限</li>
-<li>创建、修改日期</li>
-<li>连接号 连接到这个文件的</li>
-<li>文件大小</li>
-<li>定位到硬盘的实际物理地址</li>
-</ul>
-</blockquote>
-<p>有些数据不包含在inode中，文件名和目录。这些都被存储在目录文件中，通过对比文件名和inode编号，可以构成一个树状系统。用户可以使用ls -i显示inode编号，inode在硬盘上有独立的空间存储。</p>
-<h4 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h4><p><a href="http://www.tldp.org/LDP/intro-linux/html/sect_03_01.html" target="_blank" rel="external">http://www.tldp.org/LDP/intro-linux/html/sect_03_01.html</a></p>
+        <h4 id="事故"><a href="#事故" class="headerlink" title="事故"></a>事故</h4><p>晚上9点左右忽然爆出线上支付宝wap拉不起来。<br>场景：h5页面点击确认支付，不能拉起支付，<br>      但是直接拿到确认支付的请求，放在浏览器中可以拉起支付。</p>
+<h4 id="排查原因"><a href="#排查原因" class="headerlink" title="排查原因"></a>排查原因</h4><p>先看了预支付请求对接部门的返回，正常的结果。</p>
+<p>不知道原因，但是看到不能拉起支付的请求，是同时请求了支付两次，而且302跳转不正常。<br>显示异常</p>
+<pre><code>XMLHttpRequest cannot load ****支付url**** 
+&apos;control-allow-origin&apos; header is present on the requested resource
+</code></pre><p>查了下，是js跨域的异常，这时估计是什么原因导致浏览器302重定向失败了。也不知道为啥。</p>
+<p>正常的支付流程</p>
+<pre><code>    request                                      response
+
+1.前端请求支付链接请求                        
+                                            302响应，带着对接部门的支付链接
+2.浏览器拿到302，请求对接部门支付链接        
+                                            302响应，带着支付宝wap的支付链接
+3.浏览器拿到302，请求支付宝wap的支付链接
+                                            返回支付页面
+</code></pre><p>现在流程2就爆出跨域问题了。。<br>怀疑同时请求两次导致的，直接将支付链接扔到浏览器上，查看浏览器请求，一次支付请求，重定向正常，拉起支付。</p>
+<p>点击确认支付，同时请求两次支付请求，重定向异常，显示跨域异常，不能拉起支付。</p>
+<p>找到问题所在。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>现在还不知道什么原因导致的，同时请求相同的302浏览器重定向失败。<br>明明好好查下。</p>
 
       
     </div>
@@ -406,7 +357,7 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
       
         <div class="post-tags">
           
-            <a href="/tags/读书笔记/" rel="tag">#读书笔记</a>
+            <a href="/tags/前端/" rel="tag">#前端</a>
           
         </div>
       
@@ -415,17 +366,13 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/14/guarded-suspension-要等我准备好呦/" rel="next" title="guarded suspension-要等我准备好呦">
-                <i class="fa fa-chevron-left"></i> guarded suspension-要等我准备好呦
+              <a href="/2016/07/08/mit-6-824-mapreduce-part1/" rel="next" title="mit 6.824 mapreduce part1">
+                <i class="fa fa-chevron-left"></i> mit 6.824 mapreduce part1
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/06/12/idea内嵌git不可用问题解决/" rel="prev" title="idea内嵌git不可用问题解决">
-                idea内嵌git不可用问题解决 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -539,7 +486,7 @@ socket:特殊的文件类型，类似tcp socket，通过文件系统提供受">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件的种类"><span class="nav-number">1.</span> <span class="nav-text">文件的种类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分区"><span class="nav-number">2.</span> <span class="nav-text">分区</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数据分区"><span class="nav-number">2.1.</span> <span class="nav-text">数据分区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#swap分区"><span class="nav-number">2.2.</span> <span class="nav-text">swap分区</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载点"><span class="nav-number">3.</span> <span class="nav-text">挂载点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件系统"><span class="nav-number">4.</span> <span class="nav-text">文件系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献："><span class="nav-number">5.</span> <span class="nav-text">参考文献：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#事故"><span class="nav-number">1.</span> <span class="nav-text">事故</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#排查原因"><span class="nav-number">2.</span> <span class="nav-text">排查原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>
