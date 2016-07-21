@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="前端," />
+  <meta name="keywords" content="并发问题," />
 
 
 
@@ -84,43 +84,31 @@
 
 
 
-<meta name="description" content="hexo next 添加分类页
-新建一个页面，命名为 categories 。命令如下：
-hexo new page categories
-
-编辑刚新建的页面，将页面的类型设置为 categories ，主题将自动为这个页面显示所有分类。
-title: 分类
-date: 2014-12-22 12:39:04
-type: &amp;quot;categories&amp;quot;
----
-注意：如果有启用多说">
+<meta name="description" content="事故前些天上线的扫码送会员活动。场景：用户登录账号之后，扫二维码，送七天黄金会员，限制每个帐号只能领取一个      有恶意用户刷接口，在高并发下越过限制。
+原因领取会员流程：
+    1.后端先生成卡卷，将卡号放到消息队列中
+    2.用户扫码请求领取会员接口
+        2-1).先检查用户是否已经领取过该活动会员
+        2-2).领取过return “该帐号已领取”的标示">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo next 为文章添加分类">
-<meta property="og:url" content="http://yoursite.com/2016/03/16/hexo-next-添加为文章添加分类/index.html">
+<meta property="og:title" content="高并发下接口的并发问题">
+<meta property="og:url" content="http://yoursite.com/2016/07/21/高并发下接口的并发问题/index.html">
 <meta property="og:site_name" content="学而后知不足">
-<meta property="og:description" content="hexo next 添加分类页
-新建一个页面，命名为 categories 。命令如下：
-hexo new page categories
-
-编辑刚新建的页面，将页面的类型设置为 categories ，主题将自动为这个页面显示所有分类。
-title: 分类
-date: 2014-12-22 12:39:04
-type: &amp;quot;categories&amp;quot;
----
-注意：如果有启用多说">
-<meta property="og:updated_time" content="2016-06-12T23:40:14.728Z">
+<meta property="og:description" content="事故前些天上线的扫码送会员活动。场景：用户登录账号之后，扫二维码，送七天黄金会员，限制每个帐号只能领取一个      有恶意用户刷接口，在高并发下越过限制。
+原因领取会员流程：
+    1.后端先生成卡卷，将卡号放到消息队列中
+    2.用户扫码请求领取会员接口
+        2-1).先检查用户是否已经领取过该活动会员
+        2-2).领取过return “该帐号已领取”的标示">
+<meta property="og:updated_time" content="2016-07-21T14:04:40.469Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo next 为文章添加分类">
-<meta name="twitter:description" content="hexo next 添加分类页
-新建一个页面，命名为 categories 。命令如下：
-hexo new page categories
-
-编辑刚新建的页面，将页面的类型设置为 categories ，主题将自动为这个页面显示所有分类。
-title: 分类
-date: 2014-12-22 12:39:04
-type: &amp;quot;categories&amp;quot;
----
-注意：如果有启用多说">
+<meta name="twitter:title" content="高并发下接口的并发问题">
+<meta name="twitter:description" content="事故前些天上线的扫码送会员活动。场景：用户登录账号之后，扫二维码，送七天黄金会员，限制每个帐号只能领取一个      有恶意用户刷接口，在高并发下越过限制。
+原因领取会员流程：
+    1.后端先生成卡卷，将卡号放到消息队列中
+    2.用户扫码请求领取会员接口
+        2-1).先检查用户是否已经领取过该活动会员
+        2-2).领取过return “该帐号已领取”的标示">
 
 
 
@@ -141,9 +129,9 @@ type: &amp;quot;categories&amp;quot;
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/03/16/hexo-next-添加为文章添加分类/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/21/高并发下接口的并发问题/"/>
 
-  <title> hexo next 为文章添加分类 | 学而后知不足 </title>
+  <title> 高并发下接口的并发问题 | 学而后知不足 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -273,7 +261,7 @@ type: &amp;quot;categories&amp;quot;
             
             
               
-                hexo next 为文章添加分类
+                高并发下接口的并发问题
               
             
           </h1>
@@ -285,8 +273,8 @@ type: &amp;quot;categories&amp;quot;
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-16T08:12:43+08:00" content="2016-03-16">
-              2016-03-16
+            <time itemprop="dateCreated" datetime="2016-07-21T21:23:44+08:00" content="2016-07-21">
+              2016-07-21
             </time>
           </span>
 
@@ -299,8 +287,8 @@ type: &amp;quot;categories&amp;quot;
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
+                  <a href="/categories/线上bug解决/" itemprop="url" rel="index">
+                    <span itemprop="name">线上bug解决</span>
                   </a>
                 </span>
 
@@ -332,50 +320,62 @@ type: &amp;quot;categories&amp;quot;
       
 
       
-        <h4 id="hexo-next-添加分类页"><a href="#hexo-next-添加分类页" class="headerlink" title="hexo next 添加分类页"></a>hexo next 添加分类页</h4><ol>
-<li><p>新建一个页面，命名为 categories 。命令如下：</p>
-<pre><code>hexo new page categories
-</code></pre></li>
-<li><p>编辑刚新建的页面，将页面的类型设置为 categories ，主题将自动为这个页面显示所有分类。</p>
-<pre><code>title: 分类
-date: 2014-12-22 12:39:04
-type: &quot;categories&quot;
----
-</code></pre><p>注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段 comments 并将值设置为 false，如：</p>
-<pre><code>title: 分类
-date: 2014-12-22 12:39:04
-type: &quot;categories&quot;
-comments: false
----
-</code></pre></li>
-<li><p>在菜单中添加链接。编辑主题的 _config.yml ，将 menu 中的 categories: /categories 注释去掉，如下:</p>
-<pre><code>menu:
-  home: /
-  categories: /categories
-  archives: /archives
-  tags: /tags
-</code></pre></li>
-<li><p>但是这样部署之后，在分类页面还是看不到任何分类的，同时官方的next教程中并没有写。。<br>其实为文章添加分类关联的教程已经在hexo教程给出了。。<br>下面仅仅做个简单的介绍，全面的教程参照<a href="https://hexo.io/zh-cn/docs/front-matter.html#分类和标签" target="_blank" rel="external">hexo官方教程(需备梯子)</a></p>
-</li>
-</ol>
-<h4 id="添加文章分类关联"><a href="#添加文章分类关联" class="headerlink" title="添加文章分类关联"></a>添加文章分类关联</h4><ol>
-<li><p>hexo中有Front-matter这个概念，是文件最上方以 — 分隔的区域，用于指定个别文件的变量。举个栗子，在hexo new post article时会生成article.md文件，文件生成好的文章属性。</p>
-<pre><code>---
-title: hexo next 为文章添加分类
-date: 2016-03-16 08:12:43
-tags:
----
-</code></pre></li>
-<li><p>在其中添加categories属性，再部署之后就可以在分类页看到分类了</p>
-<pre><code>---
-title: hexo next 为文章添加分类
-date: 2016-03-16 08:12:43
-tags:
-categories: 前端
---- 
-</code></pre></li>
-</ol>
+        <h4 id="事故"><a href="#事故" class="headerlink" title="事故"></a>事故</h4><p>前些天上线的扫码送会员活动。<br>场景：用户登录账号之后，扫二维码，送七天黄金会员，限制每个帐号只能领取一个<br>      有恶意用户刷接口，在高并发下越过限制。</p>
+<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><pre><code>领取会员流程：
+    1.后端先生成卡卷，将卡号放到消息队列中
+    2.用户扫码请求领取会员接口
+        2-1).先检查用户是否已经领取过该活动会员
+        2-2).领取过return “该帐号已领取”的标示  
+        2-3).没领取从消息队列中拿取一张卡号
+        2-4).激活卡
+        2-5).更新用户本次活动为已经激活
+</code></pre><p>这个流程在一般环境下是没有问题的，在高并发下就不行了。</p>
+<pre><code>            2-1)        2-2)         2-3)       2-4)      2-5)
 
+线程a                                                   --&gt;
+
+线程b                                      --&gt;
+
+线程c                                    --&gt;
+</code></pre><p>高并发下模拟几个线程同时请求</p>
+<p>现在的rpc服务，除去极其敏感性数据的操作，其它数据的接口基本都没有做数据一致性控制。</p>
+<p>其实做了控制也不能解决这个问题。再来说这个问题，高并发下因为线程a已经执行完激活卡的操作，用户的会员已经建立权益。但这时候线程a还没有执行到2-5，还没更新用户的领取卡卷的状态，这时候，又有一个这个用户的领取卡卷请求过来。2-1的check 操作并不能阻止这个请求，同样的再次领取卡卷并且激活，导致线程a在的执行在2-1到2-5之间都会有其它的线程越过检查。</p>
+<h4 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h4><p>解决这种并发问题无非是两种，悲观锁和乐观锁。<br>悲观锁阻塞，乐观锁快速响应失败。</p>
+<pre><code>                优点                        缺点
+
+悲观锁        可以响应重复请求，幂等            高并发下请求堆积
+
+
+乐观锁        高并发下没有大量线程阻塞        不可重复响应，不幂等
+</code></pre><p>考虑并发量比较大，采用的乐观锁实现。对流程进行加锁。</p>
+<p>2种实现方式：redis和mysql，考虑下在不修改原表的情况下，使用redis的SETNX的api</p>
+<p>实现：</p>
+<pre><code>    2-0).活动-帐号形成key，SETNX(key)成功返回1，失败返回0
+          只有返回1，才能进行后续流程，将并发控制交给redis，redis是线程模型没有并发问题
+    2-1).先检查用户是否已经领取过该活动会员
+    2-2).领取过return “该帐号已领取”的标示  
+    2-3).没领取从消息队列中拿取一张卡号
+    2-4).激活卡
+    2-5).更新用户本次活动为已经激活
+    2-6).将删除活动-帐号形成的key
+
+
+        2-0)    2-1)   2-2)     2-3)  2-4)  2-5)   2-6)
+
+线程a   -&gt;1                                          
+
+线程b   -&gt;0                                   
+         &lt;-    
+线程c     -&gt;0                            
+         &lt;-
+
+只有线程a已经执行过2-6，才能线程b进入流程，但是这时候用户已经为领取过卡卷状态            
+线程a                                                    -&gt;
+
+线程b  -&gt;1 用户卡卷已经更新过
+
+线程c  -&gt;0                                            
+</code></pre>
       
     </div>
 
@@ -396,7 +396,7 @@ categories: 前端
       
         <div class="post-tags">
           
-            <a href="/tags/前端/" rel="tag">#前端</a>
+            <a href="/tags/并发问题/" rel="tag">#并发问题</a>
           
         </div>
       
@@ -405,17 +405,13 @@ categories: 前端
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/12/scala-学习－准备环境/" rel="next" title="scala 学习－准备环境">
-                <i class="fa fa-chevron-left"></i> scala 学习－准备环境
+              <a href="/2016/07/19/浏览器302重定向之迷/" rel="next" title="浏览器302重定向之迷">
+                <i class="fa fa-chevron-left"></i> 浏览器302重定向之迷
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/16/tcp链接端口的理解/" rel="prev" title="tcp链接端口的理解">
-                tcp链接端口的理解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -529,7 +525,7 @@ categories: 前端
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#hexo-next-添加分类页"><span class="nav-number">1.</span> <span class="nav-text">hexo next 添加分类页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加文章分类关联"><span class="nav-number">2.</span> <span class="nav-text">添加文章分类关联</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#事故"><span class="nav-number">1.</span> <span class="nav-text">事故</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原因"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决"><span class="nav-number">3.</span> <span class="nav-text">解决</span></a></li></ol></div>
             
           </div>
         </section>
