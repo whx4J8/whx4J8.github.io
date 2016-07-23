@@ -96,7 +96,7 @@ part1 单机版顺序map reducemit给了部分map reduce执行的代码，包括
 之前一直在做麻省理工大学的分布式课程mit 6.824虽然一直做，但也只是做了个lab1中的前两个part
 关于map reduce ，论文太多了。google的官方论文
 part1 单机版顺序map reducemit给了部分map reduce执行的代码，包括测试用例，单机的多机的，任务失败的，不得不说，看">
-<meta property="og:updated_time" content="2016-07-08T15:20:50.305Z">
+<meta property="og:updated_time" content="2016-07-23T14:17:04.342Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mit 6.824 mapreduce part1">
 <meta name="twitter:description" content="最近忙着工作上的事，看书看论文的时间也少了，周五啦放松下，把最近做的分布式课程梳理下。
@@ -326,7 +326,199 @@ part1 单机版顺序map reducemit给了部分map reduce执行的代码，包括
 <h5 id="3-merge-函数"><a href="#3-merge-函数" class="headerlink" title="3.merge 函数"></a>3.merge 函数</h5><p>merge函数是mit给的，没有细看，大概就是把每个reduce，按照reduce的分区顺序合并，写入最后的结果文件中。</p>
 <p>整体把map reduce的单机流程理清，最重要的还是如何实现分布式啦，如何处理map或者reduce函数的失败，hdfs的失败。</p>
 <h3 id="part2-单机的word-count"><a href="#part2-单机的word-count" class="headerlink" title="part2 单机的word count"></a>part2 单机的word count</h3><p>根据刚才已经实现的map reduce框架，自己写map函数和reduce函数，有10多个文件，和测试代码，很简单与预计结果相同啦</p>
-<h3 id="part3-分布式map-reduce"><a href="#part3-分布式map-reduce" class="headerlink" title="part3 分布式map reduce"></a>part3 分布式map reduce</h3><p>// TODO:</p>
+<h3 id="part3-分布式map-reduce"><a href="#part3-分布式map-reduce" class="headerlink" title="part3 分布式map reduce"></a>part3 分布式map reduce</h3><h4 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h4><p>这一部分模拟的是线程和rpc模拟分布式的map reduce的调度。</p>
+<p>master线程主要功能：<br>1.map reduce 任务的调度<br>2.worker的注册</p>
+<p>worker线程主要功能：执行map或者reduce任务                </p>
+<pre><code>1.首先进程先启动master线程，初始化一个master对象，master对象中主要包含mapreduce任务需要的输入文件、reduce个数、worker极其状态等。然后会启动一个rpc服务，等待worker线程的注册。
+2.初始化n个worker线程启动，并且调用注册master方法。
+3.master根据已注册的可用的worker调度map和reduce任务
+</code></pre><p>大体流程如上述。part3就是完成这个调度。</p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><h5 id="第一步-master的数据结构"><a href="#第一步-master的数据结构" class="headerlink" title="第一步 master的数据结构"></a>第一步 master的数据结构</h5><p>master数据结构</p>
+<pre><code>type Master struct {
+    sync.Mutex
+
+    address         string
+    registerChannel chan string
+    doneChannel     chan bool
+    workers         []string // protected by the mutex
+
+    // Per-task information
+    jobName string   // Name of currently executing job
+    files   []string // Input files
+    nReduce int      // Number of reduce partitions
+
+    shutdown chan struct{}
+    l        net.Listener
+    stats    []int        // 0:可用，1:不可用
+
+}
+</code></pre><p>一个并发锁，名称，注册管道，完成管道，workers，workers的状态，任务名，输入文件，reduce个数。基本能用到的就是这些。</p>
+<h5 id="第二步-handle-register-event"><a href="#第二步-handle-register-event" class="headerlink" title="第二步 handle register event"></a>第二步 handle register event</h5><p>首先master和worker是在不同的线程中并行执行<br>master线程（部分代码）</p>
+<pre><code>mr.jobName = jobName
+mr.files = files
+mr.nReduce = nreduce
+
+fmt.Printf(&quot;%s: Starting Map/Reduce task %s\n&quot;, mr.address, mr.jobName)
+
+schedule(mapPhase)
+schedule(reducePhase)
+finish()
+mr.merge()
+
+fmt.Printf(&quot;%s: Map/Reduce task completed\n&quot;, mr.address)
+
+mr.doneChannel &lt;- true
+</code></pre><p>worker线程（部分代码）</p>
+<pre><code>wk := new(Worker)
+wk.name = me
+wk.Map = MapFunc
+wk.Reduce = ReduceFunc
+wk.nRPC = nRPC
+rpcs := rpc.NewServer()
+rpcs.Register(wk)
+os.Remove(me) // only needed for &quot;unix&quot;
+l, e := net.Listen(&quot;unix&quot;, me)
+if e != nil {
+    log.Fatal(&quot;RunWorker: worker &quot;, me, &quot; error: &quot;, e)
+}
+wk.l = l
+wk.register(MasterAddress)
+</code></pre><p>也就是说在master调用schedule(mapPhase)时候，我们并不能知道worker知否已经注册到了master。</p>
+<p>先来看下wokrer调用master的register的rpc服务</p>
+<pre><code>func (mr *Master) Register(args *RegisterArgs, _ *struct{}) error {
+    mr.Lock()
+    defer mr.Unlock()
+    debug(&quot;Register: worker %s\n&quot;, args.Worker)
+    mr.workers = append(mr.workers, args.Worker)
+    go func() {
+        mr.registerChannel &lt;- args.Worker
+    }()
+    return nil
+}
+</code></pre><p>在master.workers中添加一个新的worker，并且写入mr.registerChannel<br>所以在schedule方法中，我们只要监听这个event即可</p>
+<pre><code>func handleRegisterEvent(mr *Master,callback *Callback){
+
+    go func(mr *Master){
+        for true{
+            &lt;- mr.registerChannel                //wait 新的注册事件
+            mr.Lock()
+            mr.stats = append(mr.stats,0)            //初始化可用状态
+            callback.callbackChannel &lt;- &quot;register&quot;        //通知callback
+            mr.Unlock()
+        }
+
+    }(mr)
+
+}    
+</code></pre><p>起一个线程专门wait worker的 register事件，然后通知callback，callback在获取可用worker时候用到</p>
+<h5 id="第三步-获取可用worker"><a href="#第三步-获取可用worker" class="headerlink" title="第三步 获取可用worker"></a>第三步 获取可用worker</h5><p>在获取可用的worker时<br>先去master中找有没有可用的worker，状态为0的worker，如果有直接返回，没有则等待callback通知。<br>callback的写入事件包涵两种：</p>
+<pre><code>1.worker注册事件
+2.worker完成任务事件
+</code></pre><p>map reduce任务量可能很大，但是worker却只有几个。当worker都在使用中，等着分配worker的map reduce任务，只能等待。<br>当有新的可用的worker才能被调度。</p>
+<pre><code>/**
+    获取空闲的worker
+ */
+func idleWorker(mr *Master,callback *Callback) (idleWorker string,index int){
+
+    //fmt.Printf(&quot;before getidle worker : %s stats : %s\n&quot;,mr.workers, mr.stats)
+    for true {
+        idleWorker,index = getIdleWorker(mr)
+
+        if idleWorker == &quot;&quot; {                        //等待新事件
+            event := &lt;- callback.callbackChannel
+            if event == &quot;register&quot; {
+                //fmt.Println(&quot;handle new register worker event&quot;)
+            }else {
+                //fmt.Println(&quot;handle new done worker event&quot;)
+            }
+        } else{                                //获取到woker
+            break;
+        }
+
+    }
+    //fmt.Printf(&quot;after getidle worker : %s stats %d\n:&quot;,mr.workers, mr.stats)
+    return idleWorker,index
+}
+
+/**
+    获取可用状态的worker
+ */
+func getIdleWorker(mr *Master)(idleWorker string,index int){
+    mr.Lock()
+    defer mr.Unlock()
+    for i,_ := range mr.stats {
+        if(mr.stats[i] != 1 ){                    //有可用的worker
+            idleWorker = mr.workers[i]
+            index = i
+        }
+    }
+    return
+}
+</code></pre><h5 id="第四步-调度主流程"><a href="#第四步-调度主流程" class="headerlink" title="第四步 调度主流程"></a>第四步 调度主流程</h5><p>基本的获取worker的操作在前两步中已经有了。</p>
+<p>1.handle register event </p>
+<p>2.获取到可用的worker</p>
+<p>3.调用worker的doMap rpc，告诉worker之行map／reduce任务</p>
+<p>4.完成任务通知</p>
+<p>这里说明一下因为并不能知道当前是否有任务在等待worker的完成，如果直接callback.callbackChannel &lt;- “done”这样写入造成会造成阻塞，当worker够用没有线程在等待callback事件时，这个线程则会阻塞在这里，无法完成任务。所以使用Select非阻塞的方式，如果没有线程在等待callback事件的写入，则不通知。</p>
+<p>5.等待所有任务完成</p>
+<pre><code>callback := &amp;Callback {
+    name : &quot;callback&quot;,
+    callbackChannel : make(chan string),
+}
+
+workdone := make(chan string)
+
+handleRegisterEvent(mr, callback)    //单独handle注册事件
+
+for i:=0 ; i&lt;ntasks ; i++ {                    //先分配map任务给当前空闲的worker
+
+    go func(nowNumTask int) {
+        w,index := idleWorker(mr,callback)        //阻塞,等待可用worker
+
+        mr.stats[index] = 1
+
+        var taskArgs *DoTaskArgs
+        if phase == mapPhase{
+            taskArgs = &amp;DoTaskArgs{
+                JobName : mr.jobName,
+                File : mr.files[nowNumTask],
+                Phase:mapPhase,
+                TaskNumber:nowNumTask,
+                NumOtherPhase:nios,
+            }
+        }else {
+            taskArgs = &amp;DoTaskArgs{
+                JobName : mr.jobName,
+                Phase:reducePhase,
+                TaskNumber:nowNumTask,
+                NumOtherPhase:nios,
+            }
+        }
+
+        reply := new(struct{})
+
+        ok := call(w,&quot;Worker.DoTask&quot;,taskArgs,reply)
+        if ok == false {
+            fmt.Println(&quot;do &quot; + phase + &quot; error&quot;)
+        }
+
+        mr.stats[index] = 0        //完成任务
+
+        select {
+        case callback.callbackChannel &lt;- &quot;done&quot;:
+        default :
+        }
+
+        workdone &lt;- &quot;work done&quot;
+
+    }(i)
+
+}
+
+for i:=0 ; i &lt; ntasks ; i++ {            //等待所有worker完成
+    &lt;- workdone
+}
+</code></pre><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>part3 实际需要考虑的就是多线程的同步、通知等问题。有时间可以看下yarn的调度方式。</p>
 
       
     </div>
@@ -481,7 +673,7 @@ part1 单机版顺序map reducemit给了部分map reduce执行的代码，包括
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#part1-单机版顺序map-reduce"><span class="nav-number">1.</span> <span class="nav-text">part1 单机版顺序map reduce</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-doMap-函数"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.doMap 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-doReduce-函数"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.doReduce 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-merge-函数"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.merge 函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part2-单机的word-count"><span class="nav-number">2.</span> <span class="nav-text">part2 单机的word count</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part3-分布式map-reduce"><span class="nav-number">3.</span> <span class="nav-text">part3 分布式map reduce</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#part1-单机版顺序map-reduce"><span class="nav-number">1.</span> <span class="nav-text">part1 单机版顺序map reduce</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-doMap-函数"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.doMap 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-doReduce-函数"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.doReduce 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-merge-函数"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.merge 函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part2-单机的word-count"><span class="nav-number">2.</span> <span class="nav-text">part2 单机的word count</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part3-分布式map-reduce"><span class="nav-number">3.</span> <span class="nav-text">part3 分布式map reduce</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#功能"><span class="nav-number">3.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">3.2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步-master的数据结构"><span class="nav-number">3.2.1.</span> <span class="nav-text">第一步 master的数据结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步-handle-register-event"><span class="nav-number">3.2.2.</span> <span class="nav-text">第二步 handle register event</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步-获取可用worker"><span class="nav-number">3.2.3.</span> <span class="nav-text">第三步 获取可用worker</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四步-调度主流程"><span class="nav-number">3.2.4.</span> <span class="nav-text">第四步 调度主流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">3.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
