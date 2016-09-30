@@ -248,6 +248,123 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/29/jenkins集成maven-cobertur-jacoco/" itemprop="url">
+                  jenkins集成maven cobertur jacoco
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-29T23:56:07+08:00" content="2016-09-29">
+              2016-09-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="jenkins集成maven"><a href="#jenkins集成maven" class="headerlink" title="jenkins集成maven"></a>jenkins集成maven</h4><h5 id="安装maven环境"><a href="#安装maven环境" class="headerlink" title="安装maven环境"></a>安装maven环境</h5><p>1.在本地安装maven环境，maven是一个jar包管理工具。去官网<a href="http://maven.apache.org/download.cgi" target="_blank" rel="external">http://maven.apache.org/download.cgi</a> 下载apache-maven-3.3.9-bin.zip，解压后放到当前用户的目录下。</p>
+<pre><code>/Users/wanghongxing/code/tool/apache-maven-3.3.9             
+</code></pre><p>2.进入到该目录后,测试环境是否成功。执行命令查看环境</p>
+<pre><code>./bin/mvn -v
+</code></pre><p>显示java和maven的version和path，则代表成功。不成功多半是java环境变量没有配置好</p>
+<pre><code>➜  apache-maven-3.3.9 ./bin/mvn -v
+Apache Maven 3.3.9 (bb52d8502b132ec0a5a3f4c09453c07478323dc5; 2015-11-11T00:41:47+08:00)
+Maven home: /Users/wanghongxing/code/tool/apache-maven-3.3.9
+Java version: 1.8.0_91, vendor: Oracle Corporation
+Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/jre
+Default locale: zh_CN, platform encoding: UTF-8
+OS name: &quot;mac os x&quot;, version: &quot;10.11.6&quot;, arch: &quot;x86_64&quot;, family: &quot;mac&quot;
+</code></pre><h5 id="jenkins集成maven环境"><a href="#jenkins集成maven环境" class="headerlink" title="jenkins集成maven环境"></a>jenkins集成maven环境</h5><p>1.配置jenkins中的maven工具<br>在 系统管理-Global Tool Configuration<br>配置jdk、maven、git工具，git一般是配置好的不用管，maven和jdk要配置好路径，注意不要点自动安装。如下图</p>
+<p><img src="/images/conf_jdk.png" alt=""></p>
+<p><img src="/images/conf_git.png" alt=""></p>
+<p><img src="/images/conf_maven.png" alt=""></p>
+<p>2.点击新建,选择构建maven项目</p>
+<p><img src="/images/conf_maven_deploy.png" alt=""></p>
+<p>选择github project </p>
+<p><img src="/images/conf_git_project.png" alt=""><br><img src="/images/conf_git_project2.png" alt=""></p>
+<p>点击保存</p>
+<p>执行构建，如果失败 查看本次构建的Console Output，看日志提示哪里执行时报错了。</p>
+<h4 id="jenkins集成cobertur"><a href="#jenkins集成cobertur" class="headerlink" title="jenkins集成cobertur"></a>jenkins集成cobertur</h4><p>看这篇博客介绍的很全，照着配置就行了。<a href="http://www.voidcn.com/blog/javalover_yao/article/p-1907365.html" target="_blank" rel="external">http://www.voidcn.com/blog/javalover_yao/article/p-1907365.html</a></p>
+<h4 id="jenkins集成jacoco"><a href="#jenkins集成jacoco" class="headerlink" title="jenkins集成jacoco"></a>jenkins集成jacoco</h4><p>这篇博客，同理<br><a href="http://zhaozhiming.github.io/blog/2012/11/30/use-jacoco-in-jenkins-and-sonar-part-2/" target="_blank" rel="external">http://zhaozhiming.github.io/blog/2012/11/30/use-jacoco-in-jenkins-and-sonar-part-2/</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/21/高并发下接口的并发问题/" itemprop="url">
                   高并发下接口的并发问题
                 </a>
@@ -1875,121 +1992,6 @@ export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/09/effective-java-读书笔记-类和接口/" itemprop="url">
-                  effective java 读书笔记-类和接口
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-09T20:19:43+08:00" content="2016-04-09">
-              2016-04-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="复用建议：组合优先于继承"><a href="#复用建议：组合优先于继承" class="headerlink" title="复用建议：组合优先于继承"></a>复用建议：组合优先于继承</h4><p>如果需要复用代码，我们第一想到的是使用继承，但是这只是面向对象的一种复用方式－ 白盒复用。<br>子类继承父类，父类中的实现对子类可见，若是父类的实现代码改变，子类代码也就需要跟着改变。<br>另一种方式，对象组合－黑盒复用。对象组合要求对象之间定义好接口，相互之间使用接口引用。对象内部的实现是不可见的。</p>
-<p>因为继承父类，父类的实现对子类完全可见甚至可改变，所以父类中的任何一个改变都有可能影响到子类，这样破坏了封装性，代码非常脆弱。<br>而使用组合的方式，对象之间使用接口的方式进行调用。接口的实现改变了，但并不影响接口外部的调用，这样的代码非常稳固，复用性高</p>
-<p>使用原则：大多数情况下，组合方式优先于继承，使用这种方式的代码更容易维护。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2035,7 +2037,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

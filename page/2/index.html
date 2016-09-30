@@ -248,6 +248,121 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/09/effective-java-读书笔记-类和接口/" itemprop="url">
+                  effective java 读书笔记-类和接口
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-09T20:19:43+08:00" content="2016-04-09">
+              2016-04-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="复用建议：组合优先于继承"><a href="#复用建议：组合优先于继承" class="headerlink" title="复用建议：组合优先于继承"></a>复用建议：组合优先于继承</h4><p>如果需要复用代码，我们第一想到的是使用继承，但是这只是面向对象的一种复用方式－ 白盒复用。<br>子类继承父类，父类中的实现对子类可见，若是父类的实现代码改变，子类代码也就需要跟着改变。<br>另一种方式，对象组合－黑盒复用。对象组合要求对象之间定义好接口，相互之间使用接口引用。对象内部的实现是不可见的。</p>
+<p>因为继承父类，父类的实现对子类完全可见甚至可改变，所以父类中的任何一个改变都有可能影响到子类，这样破坏了封装性，代码非常脆弱。<br>而使用组合的方式，对象之间使用接口的方式进行调用。接口的实现改变了，但并不影响接口外部的调用，这样的代码非常稳固，复用性高</p>
+<p>使用原则：大多数情况下，组合方式优先于继承，使用这种方式的代码更容易维护。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/04/09/dapper-的学习/" itemprop="url">
                   dapper 的学习
                 </a>
@@ -1563,7 +1678,7 @@ scala&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
