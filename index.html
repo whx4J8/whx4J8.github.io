@@ -248,6 +248,143 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/17/一次简单的压测/" itemprop="url">
+                  一次简单的压测
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-17T23:24:07+08:00" content="2017-03-17">
+              2017-03-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/测试/" itemprop="url" rel="index">
+                    <span itemprop="name">测试</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="对http服务关键接口压测"><a href="#对http服务关键接口压测" class="headerlink" title="对http服务关键接口压测"></a>对http服务关键接口压测</h4><pre><code>对测试环境http服务中关键接口压测
+以下测试数据为测试环境数据、非生产环境真实数据
+</code></pre><h4 id="压测目标"><a href="#压测目标" class="headerlink" title="压测目标"></a>压测目标</h4><pre><code>测试环境单点resin 单点dubbo mongoDB
+以订单列表接口为压测对象
+</code></pre><h4 id="压测工具"><a href="#压测工具" class="headerlink" title="压测工具"></a>压测工具</h4><pre><code>siege 2.7.0
+</code></pre><h4 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h4><pre><code>${thread_num}       线程并发访问数量
+${request_num}     每个线程请求接口次数
+
+thread_num   200 400 600 800 1000 1200 1400 1600 1800 2000
+request_num 50
+
+siege -c ${thread_num} -r ${request_num} --log=/data/test_data/data.txt --header &quot;${header}&quot; orderlist
+</code></pre><h4 id="QPS"><a href="#QPS" class="headerlink" title="QPS"></a>QPS</h4><p><img src="http://p1.bqimg.com/567571/6836167ce11263d9.png" alt=""></p>
+<p>可以看出当并发达到1600时候，qps达到峰值2113.之后随着并发的增加，qps逐渐降低</p>
+<p>并且出现siege aborted due to excessive socket failure，该问题是建立tcp过程中无法拿到临时端口导致无法建立链接</p>
+<p>查看uc-rest测试机tcp链接状态</p>
+<p>netstat -n | awk ‘/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}’</p>
+<p>TIME_WAIT 11186</p>
+<p>CLOSE_WAIT 9</p>
+<p>ESTABLISHED 108</p>
+<p>大量TIME_WAIT 链接未释放，占用临时端口，新请求无法建立</p>
+<h4 id="响应率"><a href="#响应率" class="headerlink" title="响应率"></a>响应率</h4><p><img src="http://p1.bqimg.com/567571/80cb9064b666cef3.png" alt=""></p>
+<p>在并发1600，响应率瞬间降低至80%，大量未来响应请求出现</p>
+<h4 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h4><p><img src="http://p1.bqimg.com/567571/69c58b74c2b7854b.png" alt=""></p>
+<p>响应时间在并发1200之后开始剧增</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/29/jenkins集成maven-cobertur-jacoco/" itemprop="url">
                   jenkins集成maven cobertur jacoco
                 </a>
@@ -1849,154 +1986,11 @@ collector : collectorSource(35853) | console ;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/16/Hadoop安装-准备环境/" itemprop="url">
-                  Hadoop安装-准备环境
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-16T13:17:45+08:00" content="2016-04-16">
-              2016-04-16
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/分布式计算/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式计算</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>首先准备3台机器，这里和小伙伴一起买了三台阿里云</p>
-<p>1.为每台机器添加hadoop用户组，添加hadoop用户</p>
-<pre><code>sudo groupadd hadoop
-sudo useradd -g hadoop
-sudo passwd hadoop    
-</code></pre><p>2.为每台机器的hadoop配置sshkey</p>
-<pre><code>sudo su - hadoop
-cd ~/.ssh                没有.ssh目录使用ssh-keygen生成
-将三台机器的id_rsa.pub公钥拷贝到.ssh/authorized_keys中，若没有该文件touch一个
-务必保证每台机器使用hadoop用户可以ssh登录到其他机器上
-这里使用注意的是authorized_keys文件必须要有600权限
-</code></pre><p>3.配置host</p>
-<pre><code>***.***.***.*** master
-***.***.***.*** slave01
-***.***.***.*** slave02
-</code></pre><p>3.下载hadoop，配置环境变量</p>
-<pre><code>cd ~
-wget https://archive.apache.org/dist/hadoop/core/hadoop-2.2.0/hadoop-2.2.0.tar.gz
-</code></pre><p>解压后设置环境变量</p>
-<pre><code>vim ~/.bashrc
-
-export HADOOP_PREFIX=$HOME/local/opt/hadoop-2.2.0
-export HADOOP_COMMON_HOME=$HADOOP_PREFIX
-export HADOOP_HDFS_HOME=$HADOOP_PREFIX
-export HADOOP_MAPRED_HOME=$HADOOP_PREFIX
-export HADOOP_YARN_HOME=$HADOOP_PREFIX
-export HADOOP_CONF_DIR=$HADOOP_PREFIX/etc/hadoop
-export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
-</code></pre><p>srouce ~/.bash_profile 使之生效，这样的好处不会污染其他用户的环境变量</p>
-<pre><code>echo $HADOOP_PREFIX
-/home/hadoop/local/opt/hadoop-2.2.0
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2037,7 +2031,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2045,7 +2039,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -2054,7 +2048,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -2091,7 +2085,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

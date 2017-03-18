@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="压测," />
 
 
 
@@ -84,26 +84,44 @@
 
 
 
-<meta name="description" content="jenkins集成maven安装maven环境1.在本地安装maven环境，maven是一个jar包管理工具。去官网http://maven.apache.org/download.cgi 下载apache-maven-3.3.9-bin.zip，解压后放到当前用户的目录下。
-/Users/wanghongxing/code/tool/apache-maven-3.3.9">
+<meta name="description" content="对http服务关键接口压测对测试环境http服务中关键接口压测
+以下测试数据为测试环境数据、非生产环境真实数据
+压测目标测试环境单点resin 单点dubbo mongoDB
+以订单列表接口为压测对象
+压测工具siege 2.7.0
+测试用例${thread_num}       线程并发访问数量
+${request_num}     每个线程请求接口次数
+
+thread_num   200 40">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jenkins集成maven cobertur jacoco">
-<meta property="og:url" content="http://yoursite.com/2016/09/29/jenkins集成maven-cobertur-jacoco/index.html">
+<meta property="og:title" content="一次简单的压测">
+<meta property="og:url" content="http://yoursite.com/2017/03/17/一次简单的压测/index.html">
 <meta property="og:site_name" content="学而后知不足">
-<meta property="og:description" content="jenkins集成maven安装maven环境1.在本地安装maven环境，maven是一个jar包管理工具。去官网http://maven.apache.org/download.cgi 下载apache-maven-3.3.9-bin.zip，解压后放到当前用户的目录下。
-/Users/wanghongxing/code/tool/apache-maven-3.3.9">
-<meta property="og:image" content="http://yoursite.com/images/conf_jdk.png">
-<meta property="og:image" content="http://yoursite.com/images/conf_git.png">
-<meta property="og:image" content="http://yoursite.com/images/conf_maven.png">
-<meta property="og:image" content="http://yoursite.com/images/conf_maven_deploy.png">
-<meta property="og:image" content="http://yoursite.com/images/conf_git_project.png">
-<meta property="og:image" content="http://yoursite.com/images/conf_git_project2.png">
-<meta property="og:updated_time" content="2016-09-30T00:08:57.322Z">
+<meta property="og:description" content="对http服务关键接口压测对测试环境http服务中关键接口压测
+以下测试数据为测试环境数据、非生产环境真实数据
+压测目标测试环境单点resin 单点dubbo mongoDB
+以订单列表接口为压测对象
+压测工具siege 2.7.0
+测试用例${thread_num}       线程并发访问数量
+${request_num}     每个线程请求接口次数
+
+thread_num   200 40">
+<meta property="og:image" content="http://p1.bqimg.com/567571/6836167ce11263d9.png">
+<meta property="og:image" content="http://p1.bqimg.com/567571/80cb9064b666cef3.png">
+<meta property="og:image" content="http://p1.bqimg.com/567571/69c58b74c2b7854b.png">
+<meta property="og:updated_time" content="2017-03-18T11:55:06.978Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jenkins集成maven cobertur jacoco">
-<meta name="twitter:description" content="jenkins集成maven安装maven环境1.在本地安装maven环境，maven是一个jar包管理工具。去官网http://maven.apache.org/download.cgi 下载apache-maven-3.3.9-bin.zip，解压后放到当前用户的目录下。
-/Users/wanghongxing/code/tool/apache-maven-3.3.9">
-<meta name="twitter:image" content="http://yoursite.com/images/conf_jdk.png">
+<meta name="twitter:title" content="一次简单的压测">
+<meta name="twitter:description" content="对http服务关键接口压测对测试环境http服务中关键接口压测
+以下测试数据为测试环境数据、非生产环境真实数据
+压测目标测试环境单点resin 单点dubbo mongoDB
+以订单列表接口为压测对象
+压测工具siege 2.7.0
+测试用例${thread_num}       线程并发访问数量
+${request_num}     每个线程请求接口次数
+
+thread_num   200 40">
+<meta name="twitter:image" content="http://p1.bqimg.com/567571/6836167ce11263d9.png">
 
 
 
@@ -124,9 +142,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/09/29/jenkins集成maven-cobertur-jacoco/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/03/17/一次简单的压测/"/>
 
-  <title> jenkins集成maven cobertur jacoco | 学而后知不足 </title>
+  <title> 一次简单的压测 | 学而后知不足 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -256,7 +274,7 @@
             
             
               
-                jenkins集成maven cobertur jacoco
+                一次简单的压测
               
             
           </h1>
@@ -268,11 +286,30 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-29T23:56:07+08:00" content="2016-09-29">
-              2016-09-29
+            <time itemprop="dateCreated" datetime="2017-03-17T23:24:07+08:00" content="2017-03-17">
+              2017-03-17
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/测试/" itemprop="url" rel="index">
+                    <span itemprop="name">测试</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
@@ -296,30 +333,31 @@
       
 
       
-        <h4 id="jenkins集成maven"><a href="#jenkins集成maven" class="headerlink" title="jenkins集成maven"></a>jenkins集成maven</h4><h5 id="安装maven环境"><a href="#安装maven环境" class="headerlink" title="安装maven环境"></a>安装maven环境</h5><p>1.在本地安装maven环境，maven是一个jar包管理工具。去官网<a href="http://maven.apache.org/download.cgi" target="_blank" rel="external">http://maven.apache.org/download.cgi</a> 下载apache-maven-3.3.9-bin.zip，解压后放到当前用户的目录下。</p>
-<pre><code>/Users/wanghongxing/code/tool/apache-maven-3.3.9             
-</code></pre><p>2.进入到该目录后,测试环境是否成功。执行命令查看环境</p>
-<pre><code>./bin/mvn -v
-</code></pre><p>显示java和maven的version和path，则代表成功。不成功多半是java环境变量没有配置好</p>
-<pre><code>➜  apache-maven-3.3.9 ./bin/mvn -v
-Apache Maven 3.3.9 (bb52d8502b132ec0a5a3f4c09453c07478323dc5; 2015-11-11T00:41:47+08:00)
-Maven home: /Users/wanghongxing/code/tool/apache-maven-3.3.9
-Java version: 1.8.0_91, vendor: Oracle Corporation
-Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/jre
-Default locale: zh_CN, platform encoding: UTF-8
-OS name: &quot;mac os x&quot;, version: &quot;10.11.6&quot;, arch: &quot;x86_64&quot;, family: &quot;mac&quot;
-</code></pre><h5 id="jenkins集成maven环境"><a href="#jenkins集成maven环境" class="headerlink" title="jenkins集成maven环境"></a>jenkins集成maven环境</h5><p>1.配置jenkins中的maven工具<br>在 系统管理-Global Tool Configuration<br>配置jdk、maven、git工具，git一般是配置好的不用管，maven和jdk要配置好路径，注意不要点自动安装。如下图</p>
-<p><img src="/images/conf_jdk.png" alt=""></p>
-<p><img src="/images/conf_git.png" alt=""></p>
-<p><img src="/images/conf_maven.png" alt=""></p>
-<p>2.点击新建,选择构建maven项目</p>
-<p><img src="/images/conf_maven_deploy.png" alt=""></p>
-<p>选择github project </p>
-<p><img src="/images/conf_git_project.png" alt=""><br><img src="/images/conf_git_project2.png" alt=""></p>
-<p>点击保存</p>
-<p>执行构建，如果失败 查看本次构建的Console Output，看日志提示哪里执行时报错了。</p>
-<h4 id="jenkins集成cobertur"><a href="#jenkins集成cobertur" class="headerlink" title="jenkins集成cobertur"></a>jenkins集成cobertur</h4><p>看这篇博客介绍的很全，照着配置就行了。<a href="http://www.voidcn.com/blog/javalover_yao/article/p-1907365.html" target="_blank" rel="external">http://www.voidcn.com/blog/javalover_yao/article/p-1907365.html</a></p>
-<h4 id="jenkins集成jacoco"><a href="#jenkins集成jacoco" class="headerlink" title="jenkins集成jacoco"></a>jenkins集成jacoco</h4><p>这篇博客，同理<br><a href="http://zhaozhiming.github.io/blog/2012/11/30/use-jacoco-in-jenkins-and-sonar-part-2/" target="_blank" rel="external">http://zhaozhiming.github.io/blog/2012/11/30/use-jacoco-in-jenkins-and-sonar-part-2/</a></p>
+        <h4 id="对http服务关键接口压测"><a href="#对http服务关键接口压测" class="headerlink" title="对http服务关键接口压测"></a>对http服务关键接口压测</h4><pre><code>对测试环境http服务中关键接口压测
+以下测试数据为测试环境数据、非生产环境真实数据
+</code></pre><h4 id="压测目标"><a href="#压测目标" class="headerlink" title="压测目标"></a>压测目标</h4><pre><code>测试环境单点resin 单点dubbo mongoDB
+以订单列表接口为压测对象
+</code></pre><h4 id="压测工具"><a href="#压测工具" class="headerlink" title="压测工具"></a>压测工具</h4><pre><code>siege 2.7.0
+</code></pre><h4 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h4><pre><code>${thread_num}       线程并发访问数量
+${request_num}     每个线程请求接口次数
+
+thread_num   200 400 600 800 1000 1200 1400 1600 1800 2000
+request_num 50
+
+siege -c ${thread_num} -r ${request_num} --log=/data/test_data/data.txt --header &quot;${header}&quot; orderlist
+</code></pre><h4 id="QPS"><a href="#QPS" class="headerlink" title="QPS"></a>QPS</h4><p><img src="http://p1.bqimg.com/567571/6836167ce11263d9.png" alt=""></p>
+<p>可以看出当并发达到1600时候，qps达到峰值2113.之后随着并发的增加，qps逐渐降低</p>
+<p>并且出现siege aborted due to excessive socket failure，该问题是建立tcp过程中无法拿到临时端口导致无法建立链接</p>
+<p>查看uc-rest测试机tcp链接状态</p>
+<p>netstat -n | awk ‘/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}’</p>
+<p>TIME_WAIT 11186</p>
+<p>CLOSE_WAIT 9</p>
+<p>ESTABLISHED 108</p>
+<p>大量TIME_WAIT 链接未释放，占用临时端口，新请求无法建立</p>
+<h4 id="响应率"><a href="#响应率" class="headerlink" title="响应率"></a>响应率</h4><p><img src="http://p1.bqimg.com/567571/80cb9064b666cef3.png" alt=""></p>
+<p>在并发1600，响应率瞬间降低至80%，大量未来响应请求出现</p>
+<h4 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h4><p><img src="http://p1.bqimg.com/567571/69c58b74c2b7854b.png" alt=""></p>
+<p>响应时间在并发1200之后开始剧增</p>
 
       
     </div>
@@ -339,22 +377,24 @@ OS name: &quot;mac os x&quot;, version: &quot;10.11.6&quot;, arch: &quot;x86_64&
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/压测/" rel="tag">#压测</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/21/高并发下接口的并发问题/" rel="next" title="高并发下接口的并发问题">
-                <i class="fa fa-chevron-left"></i> 高并发下接口的并发问题
+              <a href="/2016/09/29/jenkins集成maven-cobertur-jacoco/" rel="next" title="jenkins集成maven cobertur jacoco">
+                <i class="fa fa-chevron-left"></i> jenkins集成maven cobertur jacoco
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/17/一次简单的压测/" rel="prev" title="一次简单的压测">
-                一次简单的压测 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -468,7 +508,7 @@ OS name: &quot;mac os x&quot;, version: &quot;10.11.6&quot;, arch: &quot;x86_64&
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#jenkins集成maven"><span class="nav-number">1.</span> <span class="nav-text">jenkins集成maven</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装maven环境"><span class="nav-number">1.1.</span> <span class="nav-text">安装maven环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#jenkins集成maven环境"><span class="nav-number">1.2.</span> <span class="nav-text">jenkins集成maven环境</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jenkins集成cobertur"><span class="nav-number">2.</span> <span class="nav-text">jenkins集成cobertur</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jenkins集成jacoco"><span class="nav-number">3.</span> <span class="nav-text">jenkins集成jacoco</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#对http服务关键接口压测"><span class="nav-number">1.</span> <span class="nav-text">对http服务关键接口压测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#压测目标"><span class="nav-number">2.</span> <span class="nav-text">压测目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#压测工具"><span class="nav-number">3.</span> <span class="nav-text">压测工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试用例"><span class="nav-number">4.</span> <span class="nav-text">测试用例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QPS"><span class="nav-number">5.</span> <span class="nav-text">QPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应率"><span class="nav-number">6.</span> <span class="nav-text">响应率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应时间"><span class="nav-number">7.</span> <span class="nav-text">响应时间</span></a></li></ol></div>
             
           </div>
         </section>

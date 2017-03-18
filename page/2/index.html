@@ -248,6 +248,149 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/16/Hadoop安装-准备环境/" itemprop="url">
+                  Hadoop安装-准备环境
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-16T13:17:45+08:00" content="2016-04-16">
+              2016-04-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/分布式计算/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式计算</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>首先准备3台机器，这里和小伙伴一起买了三台阿里云</p>
+<p>1.为每台机器添加hadoop用户组，添加hadoop用户</p>
+<pre><code>sudo groupadd hadoop
+sudo useradd -g hadoop
+sudo passwd hadoop    
+</code></pre><p>2.为每台机器的hadoop配置sshkey</p>
+<pre><code>sudo su - hadoop
+cd ~/.ssh                没有.ssh目录使用ssh-keygen生成
+将三台机器的id_rsa.pub公钥拷贝到.ssh/authorized_keys中，若没有该文件touch一个
+务必保证每台机器使用hadoop用户可以ssh登录到其他机器上
+这里使用注意的是authorized_keys文件必须要有600权限
+</code></pre><p>3.配置host</p>
+<pre><code>***.***.***.*** master
+***.***.***.*** slave01
+***.***.***.*** slave02
+</code></pre><p>3.下载hadoop，配置环境变量</p>
+<pre><code>cd ~
+wget https://archive.apache.org/dist/hadoop/core/hadoop-2.2.0/hadoop-2.2.0.tar.gz
+</code></pre><p>解压后设置环境变量</p>
+<pre><code>vim ~/.bashrc
+
+export HADOOP_PREFIX=$HOME/local/opt/hadoop-2.2.0
+export HADOOP_COMMON_HOME=$HADOOP_PREFIX
+export HADOOP_HDFS_HOME=$HADOOP_PREFIX
+export HADOOP_MAPRED_HOME=$HADOOP_PREFIX
+export HADOOP_YARN_HOME=$HADOOP_PREFIX
+export HADOOP_CONF_DIR=$HADOOP_PREFIX/etc/hadoop
+export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
+</code></pre><p>srouce ~/.bash_profile 使之生效，这样的好处不会污染其他用户的环境变量</p>
+<pre><code>echo $HADOOP_PREFIX
+/home/hadoop/local/opt/hadoop-2.2.0
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/04/09/effective-java-读书笔记-类和接口/" itemprop="url">
                   effective java 读书笔记-类和接口
                 </a>
@@ -1516,128 +1659,11 @@ scala&gt;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/05/第一篇博客/" itemprop="url">
-                  第一篇博客 hexo学习笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-05T18:14:42+08:00" content="2016-03-05">
-              2016-03-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="为什么用hexo"><a href="#为什么用hexo" class="headerlink" title="为什么用hexo"></a>为什么用hexo</h2><p></p><p>以前都是直接在csdn上写博客，一直也是断断续续的。<br>后来自己买了个阿里云一直想搞个自己的博客，但懒的弄前端.就一直没搞＝＝<br>现在看大神们博客都是这种样式，才知道用的都是hexo生成的<br>不得不说真的很好用，哼哼</p><p></p>
-<h2 id="hexo-git-安装"><a href="#hexo-git-安装" class="headerlink" title="hexo git 安装"></a>hexo git 安装</h2><p></p><p>hexo git 的安装指南google一下有很多，这里不再陈述了，介绍一个比较靠谱的<br>阅读原文－<a href="http://wsgzao.github.io/post/hexo-guide//" target="_blank" rel="external">http://wsgzao.github.io/post/hexo-guide/</a><br>有问题可以在下面大大下面的博客留言，非常感谢大大的解答</p><p></p>
-<h2 id="hexo-markdown的使用"><a href="#hexo-markdown的使用" class="headerlink" title="hexo markdown的使用"></a>hexo markdown的使用</h2><p>在github上建好博客，能够正常的访问，第一步总算是完成了，接下来就是写博客</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;new article&quot;</span><br></pre></td></tr></table></figure>
-<p>创建博客，在source/_posts/目录下看到新建的new article.md<br>使用markdown编辑器打开，我用的MacDown效果不错很轻，用起来很方便<br>学习markdown的语法,推荐一本<a href="https://wizardforcel.gitbooks.io/markdown-simple-world/content/hexo-tutor-3.html" target="_blank" rel="external">gitbook</a>，上边有MacDown和hexo的语法、搭建使用等等，相当全面</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1678,7 +1704,7 @@ scala&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1686,7 +1712,7 @@ scala&gt;
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1695,7 +1721,7 @@ scala&gt;
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1732,7 +1758,7 @@ scala&gt;
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
