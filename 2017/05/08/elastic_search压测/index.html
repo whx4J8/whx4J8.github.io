@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="scala," />
+  <meta name="keywords" content="压测," />
 
 
 
@@ -84,40 +84,41 @@
 
 
 
-<meta name="description" content="Mac Linux 下安装scala1.下载scala
-从这里下载最新版本scala ,http://www.scala-lang.org/download/
-2.安装scala
-移动安装包到 
-/usr/local/
-修改环境变量，sudo su进入root权限    
-vim /etc/profile
-在文件末尾添加
-export PATH=&amp;quot;$PATH:/usr/local/sca">
+<meta name="description" content="多机压测 elastic search1.压测对象resin3
+压测目标:分页查询用户全量订单接口
+1.2台resin http服务  (测试环境 resin3 默认配置，未调优)
+2.2台dubbo 服务 (测试环境 4g内存 provider 600线程)
+3.5台elastic_search集群 ssd硬盘 (将上线的es)
+jetty8
+压测目标:分页查询用户全量订单接口
+1.2台resi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="scala 学习－准备环境">
-<meta property="og:url" content="http://yoursite.com/2016/03/12/scala-学习－准备环境/index.html">
+<meta property="og:title" content="elastic_search压测">
+<meta property="og:url" content="http://yoursite.com/2017/05/08/elastic_search压测/index.html">
 <meta property="og:site_name" content="学而后知不足">
-<meta property="og:description" content="Mac Linux 下安装scala1.下载scala
-从这里下载最新版本scala ,http://www.scala-lang.org/download/
-2.安装scala
-移动安装包到 
-/usr/local/
-修改环境变量，sudo su进入root权限    
-vim /etc/profile
-在文件末尾添加
-export PATH=&amp;quot;$PATH:/usr/local/sca">
-<meta property="og:updated_time" content="2016-06-12T23:40:15.340Z">
+<meta property="og:description" content="多机压测 elastic search1.压测对象resin3
+压测目标:分页查询用户全量订单接口
+1.2台resin http服务  (测试环境 resin3 默认配置，未调优)
+2.2台dubbo 服务 (测试环境 4g内存 provider 600线程)
+3.5台elastic_search集群 ssd硬盘 (将上线的es)
+jetty8
+压测目标:分页查询用户全量订单接口
+1.2台resi">
+<meta property="og:image" content="http://i1.piimg.com/588926/6ad8d7d94f790162.png">
+<meta property="og:image" content="http://i4.buimg.com/588926/ec4c13025f4ce922.png">
+<meta property="og:image" content="http://i1.piimg.com/588926/782f93d47df765f2.png">
+<meta property="og:updated_time" content="2017-05-08T15:47:51.132Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="scala 学习－准备环境">
-<meta name="twitter:description" content="Mac Linux 下安装scala1.下载scala
-从这里下载最新版本scala ,http://www.scala-lang.org/download/
-2.安装scala
-移动安装包到 
-/usr/local/
-修改环境变量，sudo su进入root权限    
-vim /etc/profile
-在文件末尾添加
-export PATH=&amp;quot;$PATH:/usr/local/sca">
+<meta name="twitter:title" content="elastic_search压测">
+<meta name="twitter:description" content="多机压测 elastic search1.压测对象resin3
+压测目标:分页查询用户全量订单接口
+1.2台resin http服务  (测试环境 resin3 默认配置，未调优)
+2.2台dubbo 服务 (测试环境 4g内存 provider 600线程)
+3.5台elastic_search集群 ssd硬盘 (将上线的es)
+jetty8
+压测目标:分页查询用户全量订单接口
+1.2台resi">
+<meta name="twitter:image" content="http://i1.piimg.com/588926/6ad8d7d94f790162.png">
 
 
 
@@ -138,9 +139,9 @@ export PATH=&amp;quot;$PATH:/usr/local/sca">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/03/12/scala-学习－准备环境/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/08/elastic_search压测/"/>
 
-  <title> scala 学习－准备环境 | 学而后知不足 </title>
+  <title> elastic_search压测 | 学而后知不足 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -270,7 +271,7 @@ export PATH=&amp;quot;$PATH:/usr/local/sca">
             
             
               
-                scala 学习－准备环境
+                elastic_search压测
               
             
           </h1>
@@ -282,8 +283,8 @@ export PATH=&amp;quot;$PATH:/usr/local/sca">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-12T23:37:54+08:00" content="2016-03-12">
-              2016-03-12
+            <time itemprop="dateCreated" datetime="2017-05-08T23:24:07+08:00" content="2017-05-08">
+              2017-05-08
             </time>
           </span>
 
@@ -296,8 +297,8 @@ export PATH=&amp;quot;$PATH:/usr/local/sca">
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/scala/" itemprop="url" rel="index">
-                    <span itemprop="name">scala</span>
+                  <a href="/categories/测试/" itemprop="url" rel="index">
+                    <span itemprop="name">测试</span>
                   </a>
                 </span>
 
@@ -329,24 +330,45 @@ export PATH=&amp;quot;$PATH:/usr/local/sca">
       
 
       
-        <h4 id="Mac-Linux-下安装scala"><a href="#Mac-Linux-下安装scala" class="headerlink" title="Mac Linux 下安装scala"></a>Mac Linux 下安装scala</h4><p>1.下载scala</p>
-<pre><code>从这里下载最新版本scala ,http://www.scala-lang.org/download/
-</code></pre><p>2.安装scala</p>
-<p>移动安装包到 </p>
-<pre><code>/usr/local/
-</code></pre><p>修改环境变量，sudo su进入root权限    </p>
-<pre><code>vim /etc/profile
-</code></pre><p>在文件末尾添加</p>
-<pre><code>export PATH=&quot;$PATH:/usr/local/scala-2.11.7/bin&quot;
-</code></pre><p>3.运行</p>
-<p>在终端输入scala -version ，显示</p>
-<pre><code>Scala code runner version 2.11.7 -- Copyright 2002-2013, LAMP/EPFL
-</code></pre><p>或者 输入scala ，显示</p>
-<pre><code>Welcome to Scala version 2.11.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_60).
-Type in expressions to have them evaluated.
-Type :help for more information.
-scala&gt; 
-</code></pre>
+        <h3 id="多机压测-elastic-search"><a href="#多机压测-elastic-search" class="headerlink" title="多机压测 elastic search"></a>多机压测 elastic search</h3><h4 id="1-压测对象"><a href="#1-压测对象" class="headerlink" title="1.压测对象"></a>1.压测对象</h4><p>resin3</p>
+<pre><code>压测目标:分页查询用户全量订单接口
+1.2台resin http服务  (测试环境 resin3 默认配置，未调优)
+2.2台dubbo 服务 (测试环境 4g内存 provider 600线程)
+3.5台elastic_search集群 ssd硬盘 (将上线的es)
+</code></pre><p>jetty8</p>
+<pre><code>压测目标:分页查询用户全量订单接口
+1.2台resin http服务  (测试环境 jetty8 默认配置，未调优)
+2.2台dubbo 服务 (测试环境 4g内存 provider 600线程)
+3.5台elastic_search集群 ssd硬盘 (将上线的es)
+</code></pre><h4 id="2-压测工具"><a href="#2-压测工具" class="headerlink" title="2.压测工具"></a>2.压测工具</h4><pre><code>siege 2.7.0
+</code></pre><h4 id="3-压测方式"><a href="#3-压测方式" class="headerlink" title="3.压测方式"></a>3.压测方式</h4><p>单台虚拟机性能较弱，能够tcp链接数和Linux进程数量有限。采用多机压测，统计平均结果的方式</p>
+<p>每台压测机上的脚本</p>
+<pre><code>siege -c $1 -r $2 --log=/data/pressure_test/data.txt --header &quot;Cookie: cookie登录的标识&quot; -f /data/pressure_test/url.txt
+$1     启动的线程数量
+$2    每个线程请求的数量
+/data/pressure_test/data.txt        压测结果数据文件
+/data/pressure_test/url.txt        将要压测的url
+</code></pre><p>压测脚本部署在5台压测机器上,由中控机控制并发访问</p>
+<pre><code>*.143
+*.144
+*.145
+*.107
+*.28    
+</code></pre><p>中控机启动脚本,使用后台启动，保证每台压测上脚本并发执行</p>
+<pre><code>ips=`cat /root/pressure_test/ips`
+for ip in $ips
+do
+    {
+        ssh $ip &quot;sh /data/pressure_test/pressure_test.sh $1 $2 &gt; temp.log&quot;
+    }&amp;
+done
+wait
+</code></pre><h4 id="4-resin3与jetty8下的ES查询压测对比"><a href="#4-resin3与jetty8下的ES查询压测对比" class="headerlink" title="4.resin3与jetty8下的ES查询压测对比"></a>4.resin3与jetty8下的ES查询压测对比</h4><p>QPS<br><img src="http://i1.piimg.com/588926/6ad8d7d94f790162.png" alt=""><br>横坐标为同时请求的并发数量，纵坐标为接口实际每秒查询率QPS</p>
+<p>响应率<br><img src="http://i4.buimg.com/588926/ec4c13025f4ce922.png" alt=""><br>横坐标为同时请求的并发数量，纵坐标为接口实际响应率</p>
+<p>响应时间<br><img src="http://i1.piimg.com/588926/782f93d47df765f2.png" alt=""><br>横坐标为同时请求的并发数量，纵坐标为接口实际平均响应时间</p>
+<p>resin在默认配置下，2台在3200并发下为极限性能，qps达到2k，然后急速下滑，响应率下降，响应时间突增。</p>
+<p>jetty在默认配置下，2台在3600-5200并发为基本可以维持3k左右qps，响应率100%，响应可以维持在1s内。在5600并发下为极限并发，开始出现响应率下降，响应时间突增的现象。</p>
+
       
     </div>
 
@@ -367,7 +389,7 @@ scala&gt;
       
         <div class="post-tags">
           
-            <a href="/tags/scala/" rel="tag">#scala</a>
+            <a href="/tags/压测/" rel="tag">#压测</a>
           
         </div>
       
@@ -376,17 +398,13 @@ scala&gt;
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/06/machine-learning-apriori/" rel="next" title="machine learning - apriori">
-                <i class="fa fa-chevron-left"></i> machine learning - apriori
+              <a href="/2017/03/17/一次简单的压测/" rel="next" title="一次简单的压测">
+                <i class="fa fa-chevron-left"></i> 一次简单的压测
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/16/hexo-next-添加为文章添加分类/" rel="prev" title="hexo next 为文章添加分类">
-                hexo next 为文章添加分类 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -500,7 +518,7 @@ scala&gt;
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mac-Linux-下安装scala"><span class="nav-number">1.</span> <span class="nav-text">Mac Linux 下安装scala</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多机压测-elastic-search"><span class="nav-number">1.</span> <span class="nav-text">多机压测 elastic search</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-压测对象"><span class="nav-number">1.1.</span> <span class="nav-text">1.压测对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-压测工具"><span class="nav-number">1.2.</span> <span class="nav-text">2.压测工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-压测方式"><span class="nav-number">1.3.</span> <span class="nav-text">3.压测方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-resin3与jetty8下的ES查询压测对比"><span class="nav-number">1.4.</span> <span class="nav-text">4.resin3与jetty8下的ES查询压测对比</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

@@ -248,6 +248,156 @@
             
               
                 
+                <a class="post-title-link" href="/2017/05/08/elastic_search压测/" itemprop="url">
+                  elastic_search压测
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-08T23:24:07+08:00" content="2017-05-08">
+              2017-05-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/测试/" itemprop="url" rel="index">
+                    <span itemprop="name">测试</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="多机压测-elastic-search"><a href="#多机压测-elastic-search" class="headerlink" title="多机压测 elastic search"></a>多机压测 elastic search</h3><h4 id="1-压测对象"><a href="#1-压测对象" class="headerlink" title="1.压测对象"></a>1.压测对象</h4><p>resin3</p>
+<pre><code>压测目标:分页查询用户全量订单接口
+1.2台resin http服务  (测试环境 resin3 默认配置，未调优)
+2.2台dubbo 服务 (测试环境 4g内存 provider 600线程)
+3.5台elastic_search集群 ssd硬盘 (将上线的es)
+</code></pre><p>jetty8</p>
+<pre><code>压测目标:分页查询用户全量订单接口
+1.2台resin http服务  (测试环境 jetty8 默认配置，未调优)
+2.2台dubbo 服务 (测试环境 4g内存 provider 600线程)
+3.5台elastic_search集群 ssd硬盘 (将上线的es)
+</code></pre><h4 id="2-压测工具"><a href="#2-压测工具" class="headerlink" title="2.压测工具"></a>2.压测工具</h4><pre><code>siege 2.7.0
+</code></pre><h4 id="3-压测方式"><a href="#3-压测方式" class="headerlink" title="3.压测方式"></a>3.压测方式</h4><p>单台虚拟机性能较弱，能够tcp链接数和Linux进程数量有限。采用多机压测，统计平均结果的方式</p>
+<p>每台压测机上的脚本</p>
+<pre><code>siege -c $1 -r $2 --log=/data/pressure_test/data.txt --header &quot;Cookie: cookie登录的标识&quot; -f /data/pressure_test/url.txt
+$1     启动的线程数量
+$2    每个线程请求的数量
+/data/pressure_test/data.txt        压测结果数据文件
+/data/pressure_test/url.txt        将要压测的url
+</code></pre><p>压测脚本部署在5台压测机器上,由中控机控制并发访问</p>
+<pre><code>*.143
+*.144
+*.145
+*.107
+*.28    
+</code></pre><p>中控机启动脚本,使用后台启动，保证每台压测上脚本并发执行</p>
+<pre><code>ips=`cat /root/pressure_test/ips`
+for ip in $ips
+do
+    {
+        ssh $ip &quot;sh /data/pressure_test/pressure_test.sh $1 $2 &gt; temp.log&quot;
+    }&amp;
+done
+wait
+</code></pre><h4 id="4-resin3与jetty8下的ES查询压测对比"><a href="#4-resin3与jetty8下的ES查询压测对比" class="headerlink" title="4.resin3与jetty8下的ES查询压测对比"></a>4.resin3与jetty8下的ES查询压测对比</h4><p>QPS<br><img src="http://i1.piimg.com/588926/6ad8d7d94f790162.png" alt=""><br>横坐标为同时请求的并发数量，纵坐标为接口实际每秒查询率QPS</p>
+<p>响应率<br><img src="http://i4.buimg.com/588926/ec4c13025f4ce922.png" alt=""><br>横坐标为同时请求的并发数量，纵坐标为接口实际响应率</p>
+<p>响应时间<br><img src="http://i1.piimg.com/588926/782f93d47df765f2.png" alt=""><br>横坐标为同时请求的并发数量，纵坐标为接口实际平均响应时间</p>
+<p>resin在默认配置下，2台在3200并发下为极限性能，qps达到2k，然后急速下滑，响应率下降，响应时间突增。</p>
+<p>jetty在默认配置下，2台在3600-5200并发为基本可以维持3k左右qps，响应率100%，响应可以维持在1s内。在5600并发下为极限并发，开始出现响应率下降，响应时间突增的现象。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/03/17/一次简单的压测/" itemprop="url">
                   一次简单的压测
                 </a>
@@ -1716,276 +1866,6 @@ collector : collectorSource(35853) | console ;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/14/guarded-suspension-要等我准备好呦/" itemprop="url">
-                  guarded suspension-要等我准备好呦
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-14T11:01:20+08:00" content="2016-05-14">
-              2016-05-14
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="多线程-guarded-suspension-模式"><a href="#多线程-guarded-suspension-模式" class="headerlink" title="多线程 guarded suspension 模式"></a>多线程 guarded suspension 模式</h4><p>在java多线程设计模式这本书中，提及到guarded suspension模式。<br>这种模式应用在”你要等我准备好哦”这种情况下。表明某个状态正在被保护着，不能对其进行操作。</p>
-<p>举个🌰，模拟一个http服务器的交互<br>1.客户端提交request到服务端<br>2.服务端接受到request放在requestQueue中<br>3.服务端处理request</p>
-<p>首先需要一个RequestQueue,用来存放request对象,这个队列同时被客户端和服务端操作。</p>
-<pre><code>public class RequestQueue {
-
-    private final LinkedList&lt;Request&gt; queue = new LinkedList();
-
-    public synchronized Request getRequest(){
-        while(queue.size() &lt;= 0){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return queue.removeFirst();
-    }
-
-    public synchronized void putRequest(Request request){
-        queue.addLast(request);
-        notifyAll();
-    }
-
-}
-</code></pre><p>然后是ClientThread向队列中put request对象</p>
-<pre><code>public class ClientThread extends Thread {
-
-    private Random random;
-    private final RequestQueue requestQueue;
-
-    public ClientThread(RequestQueue requestQueue, String name, long seed) {
-        super(name);
-        this.random = new Random(seed);
-        this.requestQueue = requestQueue;
-    }
-
-    @Override
-    public void run() {
-
-        int requestNum = 10000;
-        for (int i = 0; i &lt; requestNum; i++){
-            Request request = new Request(&quot;No.&quot; + i);
-            log(Thread.currentThread().getName() + &quot; requests &quot; + request);
-            requestQueue.putRequest(request);
-            doSomeThing();
-        }
-
-    }
-
-    private void log(String log){
-        System.out.println(log);
-    }
-
-    private void doSomeThing(){
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-</code></pre><p>ServerThread从队列中拿出request进行处理</p>
-<pre><code>public class ServerThread extends Thread {
-
-    private Random random;
-    private final RequestQueue requestQueue;
-
-    public ServerThread(RequestQueue requestQueue, String name, long seed) {
-        super(name);
-        this.random = new Random(seed);
-        this.requestQueue = requestQueue;
-    }
-
-    @Override
-    public void run() {
-
-        int requestNum = 10000;
-        for (int i = 0; i &lt; requestNum; i++) {
-            Request request = requestQueue.getRequest();
-            log(Thread.currentThread().getName() + &quot; handles &quot; + request);
-            doSomeThing();
-        }
-
-    }
-
-    private void log(String log) {
-        System.out.println(log);
-    }
-
-    private void doSomeThing() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-</code></pre><p>Main 中执行完整的运行</p>
-<pre><code>public class Main {
-
-    public static void main(String[] args){
-        RequestQueue requestQueue = new RequestQueue();
-        new ClientThread(requestQueue,&quot;client thread&quot;,2323423l).start();
-        new ServerThread(requestQueue,&quot;server thread-demo1&quot;,9292822l).start();
-        new ServerThread(requestQueue,&quot;server thread-2&quot;,9292822l).start();
-        new ServerThread(requestQueue,&quot;server thread-3&quot;,9292822l).start();
-        new ServerThread(requestQueue,&quot;server thread-4&quot;,9292822l).start();
-        new ServerThread(requestQueue,&quot;server thread-5&quot;,9292822l).start();
-    }
-}
-</code></pre><p>RequestQueue里封装了一个LinkedList对象放出request对象<br>getRequest方法,从queue队列头中获取一个request对象,getRequest方法必须在queue中值时才能正确的执行。</p>
-<p>一般这种情况都是有两种模式轮训和事件通知,很明显的是基于轮训的方式无端的消耗着cpu时间片。所以使用后者,guarded suspension 模式也是基于此实现的。</p>
-<p>目的：从queue中取得request<br>条件：queue.size() &gt; 0</p>
-<p>使用synchronized,wait方式,首先若是不满足条件进入while,调用wait(),线程进入到对象的wait set中,等待其他线程对该对象notify</p>
-<p>其他线程在什么情况下对其notify呢？看条件变量queue.size() &gt; 0,queue的size大于0时，也就是putRequest的时候</p>
-<p>现在已经知道什么时候去wait，什么时候去notify了。<br>可为什么要加synchronized同步呢，这个以后再进行详细说明。简单介绍下<br>在线程调用object.wait方法时候,会把当前线程防到wait set中（虚拟概念）,并且该线程进入Wait状态<br>在线程调用object.notify方法的时候，会把object的 wait set中的一个线程唤醒<br>多个线程同时处理共享的变量域，所以需要加synchronized同步。</p>
-<p>现在回来，当其他线程调用putRequest的时候，并且同步锁释放了，之前调用因getRequest方法处于Wait状态的线程获取到了锁,进行后续操作,好有问题!!!看代码</p>
-<pre><code>public synchronized Request getRequest(){
-    while(queue.size() &lt;= 0){
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    return queue.removeFirst();
-}
-</code></pre><p>synchronized方法并没有执行完,不应该释放同步锁，为什么putRequest方法可以获取到锁，并且执行?</p>
-<p>stackoverflow原文</p>
-<p>“Invoking wait inside a synchronized method is a simple way to acquire the intrinsic lock”</p>
-<p>This sentence is false, it is an error in documentation.</p>
-<p>Thread acquires the intrinsic lock when it enters a synchronized method. Thread inside the synchronized method is set as the owner of the lock and is in RUNNABLE state. Any thread that attempts to enter the locked method becomes BLOCKED.</p>
-<p>When thread calls wait it releases the current object lock (it keeps all locks from other objects) and than goes to WAITING state.</p>
-<p>When some other thread calls notify or notifyAll on that same object the first thread changes state from WAITING to BLOCKED, Notified thread does NOT automatically reacquire the lock or become RUNNABLE, in fact it must fight for the lock with all other blocked threads.</p>
-<p>WAITING and BLOCKED states both prevent thread from running, but they are very different.</p>
-<p>WAITING threads must be explicitly transformed to BLOCKED threads by a notify from some other thread.</p>
-<p>WAITING never goes directly to RUNNABLE.</p>
-<p>When RUNNABLE thread releases the lock (by leaving monitor or by waiting) one of BLOCKED threads automatically takes its place.</p>
-<p>So to summarize, thread acquires the lock when it enters synchronized method or when it reenters the synchronized method after the wait.</p>
-<pre><code>public synchronized guardedJoy() {
-    // must get lock before entering here
-    while(!joy) {
-        try {
-            wait(); // releases lock here
-            // must regain the lock to reentering here
-        } catch (InterruptedException e) {}
-    }
-    System.out.println(&quot;Joy and efficiency have been achieved!&quot;);
-}
-</code></pre><p>也就是说进入guardedJoy方法时候需要获取到锁<br>当调用wait方法时会释放锁,线程从Runnable进入Wait<br>当其他线程调用notify<br>线程从Wait进入Blocking<br>这时候需要获取到同步锁才能进行Runnable<br>明白了</p>
-<p>整理一下guarded suspension 模式</p>
-<p>1.一个具有状态的对象,这个对象被多个线程同时访问,这个对象只有在自己的状态合适的时候,才会让线程进行某些处理<br>2.使用警戒条件来表示对象的状态，并且在目的处理前,测试满足条件不满足则进行wait,满足则执行处理方法<br>3.用notify方法通知wait中的线程表明状态已经满足了，wait中的线程进入blocking获得锁后执行操作</p>
-<p>参考代码：</p>
-<pre><code>https://github.com/whx4J8/Thread.git
-</code></pre><p>参考文献：</p>
-<blockquote>
-<p>java多线程设计模式第3章<br>stackoverflow : <a href="http://stackoverflow.com/questions/13249835/java-does-wait-release-lock-from-synchronized-block" target="_blank" rel="external">http://stackoverflow.com/questions/13249835/java-does-wait-release-lock-from-synchronized-block</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2031,7 +1911,7 @@ collector : collectorSource(35853) | console ;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
