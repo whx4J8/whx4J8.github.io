@@ -248,6 +248,180 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/18/Linux-File-System总体介绍/" itemprop="url">
+                  Linux File System 总体介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-18T18:22:39+08:00" content="2016-05-18">
+              2016-05-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> <strong>On a UNIX system, everything is a file; if something is not a file, it is a process</strong> </p>
+<h4 id="文件的种类"><a href="#文件的种类" class="headerlink" title="文件的种类"></a>文件的种类</h4><blockquote>
+<ul>
+<li>目录文件:存放其他文件的文件</li>
+<li>特殊文件:用于输入输出机制，大多数特殊文件在/dev中</li>
+<li>链接:系统使文件在系统的file tree中多处可见</li>
+<li>socket:特殊的文件类型，类似tcp socket，通过文件系统提供受保护的进程网络连接</li>
+<li>命名管道:不使用网络套接字，进程间通信的一种方式</li>
+</ul>
+</blockquote>
+<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4><p>在发生故障的情况下，硬盘被分区可以保证更高的数据安全性。通过硬盘分区，可以将数据分组分离，当事故发生，只有被命中分区的数据被破坏，其他分区的数据被保存下来。</p>
+<p>例如：若整个系统为一个分区，应用程序将分区硬盘写满了，程序不能再执行，整个系统也将停止。如果数据单独存放到一个数据分区上，受影响的也仅仅是数据分区，系统分区和其他的分区正常使用。</p>
+<p>两种分区：</p>
+<pre><code>1. 数据分区，包含启动和执行系统的根目录
+2. swap分区，扩展计算的物理内存，在硬盘上的额外内存    
+</code></pre><h5 id="数据分区"><a href="#数据分区" class="headerlink" title="数据分区"></a>数据分区</h5><p>大多数系统包含一个根分区，一个或者多个数据分区，一个或多个交换分区。并且Linux系统使用fdisk安装分区的类型。</p>
+<p>标准根分区约为100-500 MB，包含系统的配置文件，基本的命令，服务器程序，系统函数库，一些临时空间和管理用户的主目录</p>
+<p>内核是一个单独的分区，他是系统中最重要的文件。你可以查看你的/boot，用来保持内核执行，和相应的文件。</p>
+<p>硬盘的其他数据都被分在数据分区，尽管有可能仅仅是一个分区。在Linux中</p>
+<blockquote>
+<ul>
+<li>/usr 用户的程序</li>
+<li>/home 用户的个人数据</li>
+<li>/var 存储临时文件和mail队列</li>
+<li>/opt 三方或者额外的软件</li>
+</ul>
+</blockquote>
+<h5 id="swap分区"><a href="#swap分区" class="headerlink" title="swap分区"></a>swap分区</h5><p>交换空间仅适用于系统本身的访问，隐藏于正常的操作，是工作的保障。在Linux上从未看过内存已满的异常也是因为swap的功劳。<br>一般Linux在使用swap的时候，硬盘和内存的转换约为2:1。就是说一个系统如果需要512M的swap内存空间。三种方案：</p>
+<blockquote>
+<ul>
+<li>一个1g的分区</li>
+<li>2个512m的分区</li>
+<li>2个硬盘分别512m的分区</li>
+</ul>
+</blockquote>
+<p>最后的适用于大量的io操作。</p>
+<p>一旦分区创建成功，你只能添加。虽然可以改变已有的分区大小，但是并不建议<br>服务器上的往往是用户数据和系统数据分离。提供服务的程序和程序的数据分离</p>
+<h4 id="挂载点"><a href="#挂载点" class="headerlink" title="挂载点"></a>挂载点</h4><p>所有的分区通过一个挂载点连接到系统，挂载点定义在文件系统中的特定数据组的位置，通常所有的分区通过根分区链接，在这个分区中用/根目录表示。这些空目录件是链接到这些分区的起始点</p>
+<p>例如我们想将分区链接到/opt/media的目录中，首先系统中/opt/media这个目录是必须存在的，并且最好是一个空的目录，然后使用mount命令，将分区添加到系统中。当你看以前的空的目录/opt/media,会包含一些媒介的文件或者目录。</p>
+<p>在一个正在运行的系统中</p>
+<blockquote>
+<ul>
+<li>df -h    命令显示有关分区和挂载点的信息</li>
+<li>df -h .  查看自己当前目录所在的分区</li>
+</ul>
+</blockquote>
+<h4 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h4><p>每个分区都有自己的文件系统，通过想象这些文件系统连接在一起，可以看到整个系统的树状结构。<br>在一个文件系统中，一个文件由一个inode表示，一个包含文件具体信息的序列号，文件所属，文件在硬盘上的位置</p>
+<p>每个分区都有自己的索引节点，在同一个系统中的多个文件系统中，可以有相同的inode编号<br>每个inode都是描述文件在硬盘上的数据结构，存储文件的属性。包含文件数据的物理位置，当一个硬盘初始化并接受数据存储，通常在初始化安装系统或者添加额外的硬盘时候，指定固定的inode的数量，这个值限制文件的最大数量，一个inode大约2到8kb存储</p>
+<p>在创建一个文件时候，得到一个新的空闲的inode。包含信息</p>
+<blockquote>
+<ul>
+<li>文件的所有者</li>
+<li>文件类型</li>
+<li>权限</li>
+<li>创建、修改日期</li>
+<li>连接号 连接到这个文件的</li>
+<li>文件大小</li>
+<li>定位到硬盘的实际物理地址</li>
+</ul>
+</blockquote>
+<p>有些数据不包含在inode中，文件名和目录。这些都被存储在目录文件中，通过对比文件名和inode编号，可以构成一个树状系统。用户可以使用ls -i显示inode编号，inode在硬盘上有独立的空间存储。</p>
+<h4 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h4><p><a href="http://www.tldp.org/LDP/intro-linux/html/sect_03_01.html" target="_blank" rel="external">http://www.tldp.org/LDP/intro-linux/html/sect_03_01.html</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/14/guarded-suspension-要等我准备好呦/" itemprop="url">
                   guarded suspension-要等我准备好呦
                 </a>
@@ -1560,135 +1734,6 @@ categories: 前端
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/12/scala-学习－准备环境/" itemprop="url">
-                  scala 学习－准备环境
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-12T23:37:54+08:00" content="2016-03-12">
-              2016-03-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/scala/" itemprop="url" rel="index">
-                    <span itemprop="name">scala</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Mac-Linux-下安装scala"><a href="#Mac-Linux-下安装scala" class="headerlink" title="Mac Linux 下安装scala"></a>Mac Linux 下安装scala</h4><p>1.下载scala</p>
-<pre><code>从这里下载最新版本scala ,http://www.scala-lang.org/download/
-</code></pre><p>2.安装scala</p>
-<p>移动安装包到 </p>
-<pre><code>/usr/local/
-</code></pre><p>修改环境变量，sudo su进入root权限    </p>
-<pre><code>vim /etc/profile
-</code></pre><p>在文件末尾添加</p>
-<pre><code>export PATH=&quot;$PATH:/usr/local/scala-2.11.7/bin&quot;
-</code></pre><p>3.运行</p>
-<p>在终端输入scala -version ，显示</p>
-<pre><code>Scala code runner version 2.11.7 -- Copyright 2002-2013, LAMP/EPFL
-</code></pre><p>或者 输入scala ，显示</p>
-<pre><code>Welcome to Scala version 2.11.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_60).
-Type in expressions to have them evaluated.
-Type :help for more information.
-scala&gt; 
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1734,7 +1779,7 @@ scala&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1751,7 +1796,7 @@ scala&gt;
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

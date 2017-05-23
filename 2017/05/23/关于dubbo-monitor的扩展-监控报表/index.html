@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="论文学习," />
+  <meta name="keywords" content="分布式服务," />
 
 
 
@@ -84,22 +84,25 @@
 
 
 
-<meta name="description" content="dapper 大规模分布式跟踪系统在分布式系统中，一次请求会跨越几个甚至几十个子系统所以我们很难统计出每个系统之间的耗时问题。所以google研发出dapper ， twitter基于dapper研发出zipkin这些大规模耗时跟踪系统。
-dapper 如何跟踪系统之间的耗时下图是分布式系统中最普遍的一次请求，用户发起request请求，A服务接收到，使用rpc调用下面的子系统。最终形成一颗调用树">
+<meta name="description" content="服务化服务化的优点1.代码统一化，业务逻辑封装在服务内，同样的业务逻辑调用服务，对于上层代码量轻，易于维护
+2.资源控制，数据库链接资源等等。mysql、es等等链接也是重要的资源，将需要维护的数据库的资源控制在服务内，若压力较大，横向扩容
+3.业务拆分，减轻同一数据库的压力，便于项目灵活变动，不同服务可能使用不同的数据库
+服务化的缺点1.数据一致性，跨服务的数据一致性：分布式事物、tcc事物、消">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dapper 的学习">
-<meta property="og:url" content="http://yoursite.com/2016/04/09/dapper-的学习/index.html">
+<meta property="og:title" content="关于dubbo monitor的扩展-监控报表">
+<meta property="og:url" content="http://yoursite.com/2017/05/23/关于dubbo-monitor的扩展-监控报表/index.html">
 <meta property="og:site_name" content="学而后知不足">
-<meta property="og:description" content="dapper 大规模分布式跟踪系统在分布式系统中，一次请求会跨越几个甚至几十个子系统所以我们很难统计出每个系统之间的耗时问题。所以google研发出dapper ， twitter基于dapper研发出zipkin这些大规模耗时跟踪系统。
-dapper 如何跟踪系统之间的耗时下图是分布式系统中最普遍的一次请求，用户发起request请求，A服务接收到，使用rpc调用下面的子系统。最终形成一颗调用树">
-<meta property="og:image" content="http://bigbully.github.io/Dapper-translation/images/img1.png">
-<meta property="og:image" content="http://bigbully.github.io/Dapper-translation/images/img5.png">
-<meta property="og:updated_time" content="2016-06-12T23:40:13.995Z">
+<meta property="og:description" content="服务化服务化的优点1.代码统一化，业务逻辑封装在服务内，同样的业务逻辑调用服务，对于上层代码量轻，易于维护
+2.资源控制，数据库链接资源等等。mysql、es等等链接也是重要的资源，将需要维护的数据库的资源控制在服务内，若压力较大，横向扩容
+3.业务拆分，减轻同一数据库的压力，便于项目灵活变动，不同服务可能使用不同的数据库
+服务化的缺点1.数据一致性，跨服务的数据一致性：分布式事物、tcc事物、消">
+<meta property="og:updated_time" content="2017-05-23T12:46:30.089Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="dapper 的学习">
-<meta name="twitter:description" content="dapper 大规模分布式跟踪系统在分布式系统中，一次请求会跨越几个甚至几十个子系统所以我们很难统计出每个系统之间的耗时问题。所以google研发出dapper ， twitter基于dapper研发出zipkin这些大规模耗时跟踪系统。
-dapper 如何跟踪系统之间的耗时下图是分布式系统中最普遍的一次请求，用户发起request请求，A服务接收到，使用rpc调用下面的子系统。最终形成一颗调用树">
-<meta name="twitter:image" content="http://bigbully.github.io/Dapper-translation/images/img1.png">
+<meta name="twitter:title" content="关于dubbo monitor的扩展-监控报表">
+<meta name="twitter:description" content="服务化服务化的优点1.代码统一化，业务逻辑封装在服务内，同样的业务逻辑调用服务，对于上层代码量轻，易于维护
+2.资源控制，数据库链接资源等等。mysql、es等等链接也是重要的资源，将需要维护的数据库的资源控制在服务内，若压力较大，横向扩容
+3.业务拆分，减轻同一数据库的压力，便于项目灵活变动，不同服务可能使用不同的数据库
+服务化的缺点1.数据一致性，跨服务的数据一致性：分布式事物、tcc事物、消">
 
 
 
@@ -120,9 +123,9 @@ dapper 如何跟踪系统之间的耗时下图是分布式系统中最普遍的�
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/04/09/dapper-的学习/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/23/关于dubbo-monitor的扩展-监控报表/"/>
 
-  <title> dapper 的学习 | 学而后知不足 </title>
+  <title> 关于dubbo monitor的扩展-监控报表 | 学而后知不足 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -252,7 +255,7 @@ dapper 如何跟踪系统之间的耗时下图是分布式系统中最普遍的�
             
             
               
-                dapper 的学习
+                关于dubbo monitor的扩展-监控报表
               
             
           </h1>
@@ -264,8 +267,8 @@ dapper 如何跟踪系统之间的耗时下图是分布式系统中最普遍的�
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-09T12:32:45+08:00" content="2016-04-09">
-              2016-04-09
+            <time itemprop="dateCreated" datetime="2017-05-23T20:18:32+08:00" content="2017-05-23">
+              2017-05-23
             </time>
           </span>
 
@@ -311,55 +314,19 @@ dapper 如何跟踪系统之间的耗时下图是分布式系统中最普遍的�
       
 
       
-        <h4 id="dapper-大规模分布式跟踪系统"><a href="#dapper-大规模分布式跟踪系统" class="headerlink" title="dapper 大规模分布式跟踪系统"></a>dapper 大规模分布式跟踪系统</h4><p>在分布式系统中，一次请求会跨越几个甚至几十个子系统所以我们很难统计出每个系统之间的耗时问题。<br>所以google研发出dapper ， twitter基于dapper研发出zipkin这些大规模耗时跟踪系统。</p>
-<h4 id="dapper-如何跟踪系统之间的耗时"><a href="#dapper-如何跟踪系统之间的耗时" class="headerlink" title="dapper 如何跟踪系统之间的耗时"></a>dapper 如何跟踪系统之间的耗时</h4><p>下图是分布式系统中最普遍的一次请求，用户发起request请求，A服务接收到，使用rpc调用下面的子系统。<br>最终形成一颗调用树，所以在需要每次做rpc调用的时候进行时间统计。</p>
-<p><img src="http://bigbully.github.io/Dapper-translation/images/img1.png" alt="dapper的trace"></p>
-<h5 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h5><p>一次完整的跟踪叫做trace，从请求到服务器开始，服务器返回response结束，跟踪每次rpc调用的耗时。</p>
-<h5 id="span"><a href="#span" class="headerlink" title="span"></a>span</h5><p>在调用rpc服务中，产生一个span用来记录rpc接受到请求的时间，rpc返回请求的时间。<br>span中下面几个参数</p>
-<pre><code>trace_id             用于标示一次完整的请求id
-span_id            当前这次调用span_id
-parent_id            上层服务的调用span_id        最上层服务parent_id为null
-annotations        用于标记的时间戳
-</code></pre><p>span在rpc收到请求创建，在rpc返回响应被收集并且销毁。<br>在rpc调用时，调用方需要将自己的span信息封装到请求中，被调用方接受到请求，从请求中拿到调用方的trace_id，span_id，生成自己的span。</p>
-<p>这样我们可以从收集的时间日志中找到所有的属于trace_id的所有span数据，根据span的parent_id和span_id就能找到自己的完整的调用链，再根据调用链中的annotaion计算出每个服务所消耗的时间</p>
-<h5 id="annotation"><a href="#annotation" class="headerlink" title="annotation"></a>annotation</h5><p>时间注释，一个span中会有多个annotation注释描述。<br>在dapper的论文中没有详细描述所需的annotation，在zipkin中，对其的描述是这样。<br>一次rpc调用中会有四个核心的annotation</p>
-<pre><code>server receive      服务器接收         sc
-client send         客户端发送        cs
-client receive      客户端接收        cr
-server send         服务器发送        ss
-</code></pre><p>这个四个核心的annotation记录下一次调用耗时</p>
-<pre><code>      调用方rpc                    被调用方rpc
-
-    -------&gt;
-                              ---------&gt;
-
-                              &lt;---------
-    &lt;-------          
-
-      sc                                
-
-
-      cs                                sr
-
-
-      cr                                ss
-
-
-      ss    
-
-调用方会产生这个四个时间戳，而被调用方因其没有调用其他rpc，所以只有sr和ss两个事件
-span会在sc这个事件中被创建,并且存活于threadlocal中,在ss这个事件中被收集并且被销毁于threadlocal中        
-</code></pre><h4 id="dapper-收集记录"><a href="#dapper-收集记录" class="headerlink" title="dapper 收集记录"></a>dapper 收集记录</h4><p>如下图，dapper纪录日志放入log file中，dapper collectors 定时请求拉取日志，存放到bigtable中。<br>尽管这样，日志量还是太大，dapper采用采样率的方式进行日志采集，采样率为1/1024。<br>zipkin 对收集工作做的更为复杂，实现了scribe方式，解决任何节点的故障的数据丢失问题。</p>
-<p><img src="http://bigbully.github.io/Dapper-translation/images/img5.png" alt="dapper的trace"></p>
-<h4 id="关于rpc的改造"><a href="#关于rpc的改造" class="headerlink" title="关于rpc的改造"></a>关于rpc的改造</h4><p>dapper没有开源，zipkin的对其dapper的设计进行实现。并且提供java的客户端brave<br>我们的线上服务使用的dubbo框架，所以只要将brave的api嵌入的dubbo中，并且在rpc调用中将当前的span信息加入到请求中。就可以完成对请求时间日志收集的工作，后端工作zipkin已经实现。</p>
-<h4 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h4><p>paper传送门:</p>
-<blockquote>
-<p>原文地址:<a href="http://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/36356.pdf" target="_blank" rel="external">http://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/36356.pdf</a><br>译文地址:<a href="http://bigbully.github.io/Dapper-translation/" target="_blank" rel="external">http://bigbully.github.io/Dapper-translation/</a></p>
-</blockquote>
-<p>todo:    </p>
-<blockquote>
-<p>阅读dubbo源码<br>阅读brave的demo源码<br>改造dubbo</p>
-</blockquote>
+        <h4 id="服务化"><a href="#服务化" class="headerlink" title="服务化"></a>服务化</h4><h5 id="服务化的优点"><a href="#服务化的优点" class="headerlink" title="服务化的优点"></a>服务化的优点</h5><p>1.代码统一化，业务逻辑封装在服务内，同样的业务逻辑调用服务，对于上层代码量轻，易于维护</p>
+<p>2.资源控制，数据库链接资源等等。mysql、es等等链接也是重要的资源，将需要维护的数据库的资源控制在服务内，若压力较大，横向扩容</p>
+<p>3.业务拆分，减轻同一数据库的压力，便于项目灵活变动，不同服务可能使用不同的数据库</p>
+<h5 id="服务化的缺点"><a href="#服务化的缺点" class="headerlink" title="服务化的缺点"></a>服务化的缺点</h5><p>1.数据一致性，跨服务的数据一致性：分布式事物、tcc事物、消息事物等等，一般业务的难以维护</p>
+<p>2.日志的查找，多个服务之间的日志，难以查找，需要介入服务治理工具，日志跟踪、日志收集、日志聚合查询等等，参考dapper</p>
+<p>3.服务本身的预警、分析、降级等等</p>
+<h4 id="dubbo-monitor"><a href="#dubbo-monitor" class="headerlink" title="dubbo monitor"></a>dubbo monitor</h4><p>dubbo为阿里的一个开源的rpc框架，以不再维护，后期当当网进行过二次开发dubbox，大多数互联网公司都在使用该框架。</p>
+<p>dubbo monitor为dubbo的一个监控工具，可以在上monitor 看到接口的TPS、并发、响应时间，可惜的是没有对monitor进行报表汇总工作。</p>
+<p>当流量激增的时候，调用方容易出现超时的情况，超时较多接口失败，影响用户体验。接口没做并发处理、幂等处理，还容易造成数据重复提交、脏读等情况。</p>
+<p>provider压力较大的情况，容易出现线程池用光，调用方新的请求不能响应，系统吞吐降低。</p>
+<p>dubbo monitor本身收集各个接口的调用、执行数据。却没有进行预警、和报表处理</p>
+<h4 id="改造"><a href="#改造" class="headerlink" title="改造"></a>改造</h4><p>2种思路</p>
+<p>1.接入dubbo monitor对其添加报警功能<br>2.接入一个新的中间轻量级服务，对其monitor添加数据分析、报表、报警功能</p>
 
       
     </div>
@@ -381,7 +348,7 @@ span会在sc这个事件中被创建,并且存活于threadlocal中,在ss这个�
       
         <div class="post-tags">
           
-            <a href="/tags/论文学习/" rel="tag">#论文学习</a>
+            <a href="/tags/分布式服务/" rel="tag">#分布式服务</a>
           
         </div>
       
@@ -390,17 +357,13 @@ span会在sc这个事件中被创建,并且存活于threadlocal中,在ss这个�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/05/effective-java读书笔记-静态工厂/" rel="next" title="effective java读书笔记-静态工厂">
-                <i class="fa fa-chevron-left"></i> effective java读书笔记-静态工厂
+              <a href="/2017/05/08/elastic_search压测/" rel="next" title="elastic_search压测">
+                <i class="fa fa-chevron-left"></i> elastic_search压测
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/09/effective-java-读书笔记-类和接口/" rel="prev" title="effective java 读书笔记-类和接口">
-                effective java 读书笔记-类和接口 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -514,7 +477,7 @@ span会在sc这个事件中被创建,并且存活于threadlocal中,在ss这个�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#dapper-大规模分布式跟踪系统"><span class="nav-number">1.</span> <span class="nav-text">dapper 大规模分布式跟踪系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dapper-如何跟踪系统之间的耗时"><span class="nav-number">2.</span> <span class="nav-text">dapper 如何跟踪系统之间的耗时</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#trace"><span class="nav-number">2.1.</span> <span class="nav-text">trace</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#span"><span class="nav-number">2.2.</span> <span class="nav-text">span</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#annotation"><span class="nav-number">2.3.</span> <span class="nav-text">annotation</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dapper-收集记录"><span class="nav-number">3.</span> <span class="nav-text">dapper 收集记录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于rpc的改造"><span class="nav-number">4.</span> <span class="nav-text">关于rpc的改造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务化"><span class="nav-number">1.</span> <span class="nav-text">服务化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务化的优点"><span class="nav-number">1.1.</span> <span class="nav-text">服务化的优点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务化的缺点"><span class="nav-number">1.2.</span> <span class="nav-text">服务化的缺点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dubbo-monitor"><span class="nav-number">2.</span> <span class="nav-text">dubbo monitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#改造"><span class="nav-number">3.</span> <span class="nav-text">改造</span></a></li></ol></div>
             
           </div>
         </section>
