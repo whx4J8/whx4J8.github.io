@@ -248,6 +248,292 @@
             
               
                 
+                <a class="post-title-link" href="/2017/06/02/dubbo学习-spring-schema扩展/" itemprop="url">
+                  dubbo学习-spring schema扩展
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-02T20:53:40+08:00" content="2017-06-02">
+              2017-06-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/dubbo/" itemprop="url" rel="index">
+                    <span itemprop="name">dubbo</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="dubbo对spring的标签的扩展"><a href="#dubbo对spring的标签的扩展" class="headerlink" title="dubbo对spring的标签的扩展"></a>dubbo对spring的标签的扩展</h4><pre><code>&lt;dubbo:application name=&quot;${dubbo.application.name}&quot; owner=&quot;whx&quot; organization=&quot;whx-inc&quot;/&gt;
+&lt;dubbo:registry protocol=&quot;zookeeper&quot;
+                address=&quot;${dubbo.registry.address}&quot;
+                group=&quot;${dubbo.registry.group}&quot;
+                file=&quot;${dubbo.registry.file}&quot;/&gt;
+
+&lt;dubbo:annotation package=&quot;com.whx&quot;/&gt;
+
+&lt;dubbo:consumer check=&quot;false&quot; retries=&quot;0&quot;/&gt;
+
+&lt;dubbo:provider threads=&quot;600&quot; threadpool=&quot;fixed&quot; retries=&quot;0&quot; loadbalance=&quot;roundrobin&quot; accesslog=&quot;true&quot;/&gt;
+
+&lt;dubbo:protocol name=&quot;dubbo&quot; port=&quot;${dubbo.protocol.dubbo.port}&quot; charset=&quot;utf-8&quot;/&gt;
+
+&lt;dubbo:protocol name=&quot;hessian&quot; port=&quot;${jetty.port}&quot; server=&quot;jetty&quot; accesslog=&quot;true&quot;/&gt;
+&lt;dubbo:protocol name=&quot;rest&quot; port=&quot;${dubbo.protocol.rest.port}&quot;
+   keepalive=&quot;true&quot; server=&quot;netty&quot; 
+   extension=&quot;com.whx.common.rest.FastJsonProvider,com.whx.common.rest.JsonExceptionMapper&quot; /&gt;
+
+&lt;context:property-placeholder
+        ignore-resource-not-found=&quot;false&quot;
+        location=&quot;classpath*:application.properties,classpath*:redis.properties,classpath*:dubbo.properties,classpath*:kestrel.properties,classpath*:db.properties&quot; /&gt;
+&lt;dubbo:monitor address=&quot;${dubbo.monitor.address}&quot; /&gt;
+</code></pre><p>这些注解其实都是对spring标签的扩展，由spring的api扩展出来，方便我们不去读取xml，直接通过标签的方式加载为bean对象</p>
+<pre><code>public class DubboNamespaceHandler extends NamespaceHandlerSupport {
+
+static {
+    Version.checkDuplicate(DubboNamespaceHandler.class);
+}
+
+public void init() {
+    registerBeanDefinitionParser(&quot;application&quot;, new DubboBeanDefinitionParser(ApplicationConfig.class, true));
+    registerBeanDefinitionParser(&quot;module&quot;, new DubboBeanDefinitionParser(ModuleConfig.class, true));
+    registerBeanDefinitionParser(&quot;registry&quot;, new DubboBeanDefinitionParser(RegistryConfig.class, true));
+    registerBeanDefinitionParser(&quot;monitor&quot;, new DubboBeanDefinitionParser(MonitorConfig.class, true));
+    registerBeanDefinitionParser(&quot;provider&quot;, new DubboBeanDefinitionParser(ProviderConfig.class, true));
+    registerBeanDefinitionParser(&quot;consumer&quot;, new DubboBeanDefinitionParser(ConsumerConfig.class, true));
+    registerBeanDefinitionParser(&quot;protocol&quot;, new DubboBeanDefinitionParser(ProtocolConfig.class, true));
+    registerBeanDefinitionParser(&quot;service&quot;, new DubboBeanDefinitionParser(ServiceBean.class, true));
+    registerBeanDefinitionParser(&quot;reference&quot;, new DubboBeanDefinitionParser(ReferenceBean.class, false));
+    registerBeanDefinitionParser(&quot;annotation&quot;, new DubboBeanDefinitionParser(AnnotationBean.class, true));
+}
+</code></pre><p>}</p>
+<h4 id="spring-schema扩展实现"><a href="#spring-schema扩展实现" class="headerlink" title="spring schema扩展实现"></a>spring schema扩展实现</h4><h5 id="1-编写Bean类，此为业务类"><a href="#1-编写Bean类，此为业务类" class="headerlink" title="1.编写Bean类，此为业务类"></a>1.编写Bean类，此为业务类</h5><pre><code>public class People {
+
+    private String id;
+    private String name;
+    private Integer age;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;People{&quot; +
+                &quot;id=&apos;&quot; + id + &apos;\&apos;&apos; +
+                &quot;, name=&apos;&quot; + name + &apos;\&apos;&apos; +
+                &quot;, age=&quot; + age +
+                &apos;}&apos;;
+    }
+}
+</code></pre><h5 id="2-编写xsd文件-xsd文件中包含了Bean类的属性映射"><a href="#2-编写xsd文件-xsd文件中包含了Bean类的属性映射" class="headerlink" title="2.编写xsd文件 xsd文件中包含了Bean类的属性映射"></a>2.编写xsd文件 xsd文件中包含了Bean类的属性映射</h5><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+    &lt;xsd:schema
+        xmlns=&quot;http://whx4j8.github.io/people&quot;
+        xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;
+        xmlns:beans=&quot;http://www.springframework.org/schema/beans&quot;
+        targetNamespace=&quot;http://whx4j8.github.io/people&quot;
+        elementFormDefault=&quot;qualified&quot;
+        attributeFormDefault=&quot;unqualified&quot;&gt;
+
+    &lt;xsd:import namespace=&quot;http://www.springframework.org/schema/beans&quot;/&gt;
+    &lt;xsd:element name=&quot;people&quot;&gt;
+        &lt;xsd:complexType&gt;
+            &lt;xsd:complexContent&gt;
+                &lt;xsd:extension base=&quot;beans:identifiedType&quot;&gt;
+                    &lt;xsd:attribute name=&quot;name&quot; type=&quot;xsd:string&quot;/&gt;
+                    &lt;xsd:attribute name=&quot;age&quot; type=&quot;xsd:int&quot;/&gt;
+                &lt;/xsd:extension&gt;
+            &lt;/xsd:complexContent&gt;
+        &lt;/xsd:complexType&gt;
+    &lt;/xsd:element&gt;
+
+&lt;/xsd:schema&gt;
+</code></pre><p>element name=”people” 代表people，spring会通过其内的配置项xsd:attribute在xml提示字段，类似xml提示</p>
+<p>xmlns targetNamespace 代表对应的唯一命名空间</p>
+<p>一般将xsd放到META-INF下</p>
+<h5 id="3-编写NamespaceHandler-和-spring-schemas-映射配置文件"><a href="#3-编写NamespaceHandler-和-spring-schemas-映射配置文件" class="headerlink" title="3.编写NamespaceHandler 和 spring.schemas 映射配置文件"></a>3.编写NamespaceHandler 和 spring.schemas 映射配置文件</h5><p>registerBeanDefinitionParser(“people”, new PeopleBeanDefinitionParser());</p>
+<p>当读取到people这个节点名时，使用PeopleBeanDefinitionParser类去解析，而不是仅仅将字段注入属性中。</p>
+<pre><code>public class MyNamespaceHandler extends NamespaceHandlerSupport {
+
+    @Override
+    public void init() {
+        registerBeanDefinitionParser(&quot;people&quot;, new PeopleBeanDefinitionParser());
+    }
+
+}
+</code></pre><p>PeopleBeanDefinitionParser通过反射将xml中配置的值注入到生成的bean对象中。</p>
+<pre><code>public class PeopleBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+
+    @Override
+    protected Class&lt;?&gt; getBeanClass(Element element) {
+        return People.class;
+    }
+
+
+    @Override
+    protected void doParse(Element element, BeanDefinitionBuilder builder) {
+        String name = element.getAttribute(&quot;name&quot;);
+        String age = element.getAttribute(&quot;age&quot;);
+        String id = element.getAttribute(&quot;id&quot;);
+
+        if (!StringUtils.isEmpty(name)){
+            builder.addPropertyValue(&quot;name&quot;,name);
+        }
+
+        if (!StringUtils.isEmpty(age)){
+            builder.addPropertyValue(&quot;age&quot;,age);
+        }
+
+        if (!StringUtils.isEmpty(id)){
+            builder.addPropertyValue(&quot;id&quot;,id);
+        }
+
+    }
+}
+</code></pre><h5 id="4-spring-handlers-和-spring-schemas"><a href="#4-spring-handlers-和-spring-schemas" class="headerlink" title="4.spring.handlers 和 spring.schemas"></a>4.spring.handlers 和 spring.schemas</h5><p>现在xml规范有了，xml解析器也有了，Bean对象也有了。</p>
+<p>spring.handlers文件</p>
+<pre><code>http\://whx4j8.github.io/people=com.whx.spring.MyNamespaceHandler
+告诉spring当使用http\://whx4j8.github.io/people使用com.whx.spring.MyNamespaceHandler去配置解析
+</code></pre><p>spring.schemas文件</p>
+<pre><code>http\://whx4j8.github.io/people.xsd=META-INF/people.xsd
+告诉spring去加载那些xsd文件
+</code></pre><h5 id="5-application-xml"><a href="#5-application-xml" class="headerlink" title="5.application.xml"></a>5.application.xml</h5><pre><code>&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:whx=&quot;http://whx4j8.github.io/people&quot;
+       xsi:schemaLocation=&quot;
+                http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                http://whx4j8.github.io/people
+                http://whx4j8.github.io/people.xsd&quot;&gt;
+
+    &lt;whx:people id=&quot;people&quot; name=&quot;whx&quot; age=&quot;22&quot;&gt;&lt;/whx:people&gt;
+&lt;/beans&gt;
+</code></pre><p>xmlns:whx=”<a href="http://whx4j8.github.io/people" target="_blank" rel="external">http://whx4j8.github.io/people</a>“ 为该schema命名为whx，在下面的xml直接使用whx即可</p>
+<h5 id="6-使用"><a href="#6-使用" class="headerlink" title="6.使用"></a>6.使用</h5><pre><code>public static void main(String[] args){
+
+    ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;application.xml&quot;);
+    People people = (People) ctx.getBean(&quot;people&quot;);
+    System.out.println(people.toString());
+
+}
+</code></pre><p>输出People{id=’people’, name=’whx’, age=22}</p>
+<h5 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h5><p>dubbo源码解析</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/05/23/关于dubbo-monitor的扩展-监控报表/" itemprop="url">
                   关于dubbo monitor的扩展-监控报表
                 </a>
@@ -1699,124 +1985,6 @@ collector : collectorSource(35853) | console ;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/12/idea内嵌git不可用问题解决/" itemprop="url">
-                  idea内嵌git不可用问题解决
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-12T11:56:44+08:00" content="2016-06-12">
-              2016-06-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="idea中使用内嵌git插件"><a href="#idea中使用内嵌git插件" class="headerlink" title="idea中使用内嵌git插件"></a>idea中使用内嵌git插件</h4><p>以前使用idea中的git比较习惯，也用过source tree、小乌龟一些插件。麻烦，总要切出去切回来。也不想用命令行，对比代码revert不方便。</p>
-<p>个人比较懒就喜欢用idea自带的git插件和一些简单git的命令。</p>
-<p>重装系统之后，导入项目。idea中的git插件确一直不可用<br>git插件不可用的状态没有git:master的显示</p>
-<p><img src="/images/ide_git_not_allow.png" alt="idea git 提示"></p>
-<p>解决方式:正确的导入maven项目<br>1.选择一个项目目录，mkdir directory<br>2.cd directory, git init初始化一个git目录<br>3.在这个git目录拉取maven项目<br>4.重启idea<br>5.idea会提示unregistered vcs roots detected如图，选择add roots</p>
-<p><img src="/images/idea_git_warn.png" alt="idea git 提示"></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1862,7 +2030,7 @@ collector : collectorSource(35853) | console ;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1870,7 +2038,7 @@ collector : collectorSource(35853) | console ;
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1879,7 +2047,7 @@ collector : collectorSource(35853) | console ;
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

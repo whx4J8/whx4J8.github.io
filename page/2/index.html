@@ -248,6 +248,124 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/12/idea内嵌git不可用问题解决/" itemprop="url">
+                  idea内嵌git不可用问题解决
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-12T11:56:44+08:00" content="2016-06-12">
+              2016-06-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="idea中使用内嵌git插件"><a href="#idea中使用内嵌git插件" class="headerlink" title="idea中使用内嵌git插件"></a>idea中使用内嵌git插件</h4><p>以前使用idea中的git比较习惯，也用过source tree、小乌龟一些插件。麻烦，总要切出去切回来。也不想用命令行，对比代码revert不方便。</p>
+<p>个人比较懒就喜欢用idea自带的git插件和一些简单git的命令。</p>
+<p>重装系统之后，导入项目。idea中的git插件确一直不可用<br>git插件不可用的状态没有git:master的显示</p>
+<p><img src="/images/ide_git_not_allow.png" alt="idea git 提示"></p>
+<p>解决方式:正确的导入maven项目<br>1.选择一个项目目录，mkdir directory<br>2.cd directory, git init初始化一个git目录<br>3.在这个git目录拉取maven项目<br>4.重启idea<br>5.idea会提示unregistered vcs roots detected如图，选择add roots</p>
+<p><img src="/images/idea_git_warn.png" alt="idea git 提示"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/18/Linux-File-System总体介绍/" itemprop="url">
                   Linux File System 总体介绍
                 </a>
@@ -1579,161 +1697,6 @@ tcp4       0      0  127.0.0.1.60352        127.0.0.1.4000         ESTABLISHED
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/16/hexo-next-添加为文章添加分类/" itemprop="url">
-                  hexo next 为文章添加分类
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-16T08:12:43+08:00" content="2016-03-16">
-              2016-03-16
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="hexo-next-添加分类页"><a href="#hexo-next-添加分类页" class="headerlink" title="hexo next 添加分类页"></a>hexo next 添加分类页</h4><ol>
-<li><p>新建一个页面，命名为 categories 。命令如下：</p>
-<pre><code>hexo new page categories
-</code></pre></li>
-<li><p>编辑刚新建的页面，将页面的类型设置为 categories ，主题将自动为这个页面显示所有分类。</p>
-<pre><code>title: 分类
-date: 2014-12-22 12:39:04
-type: &quot;categories&quot;
----
-</code></pre><p>注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段 comments 并将值设置为 false，如：</p>
-<pre><code>title: 分类
-date: 2014-12-22 12:39:04
-type: &quot;categories&quot;
-comments: false
----
-</code></pre></li>
-<li><p>在菜单中添加链接。编辑主题的 _config.yml ，将 menu 中的 categories: /categories 注释去掉，如下:</p>
-<pre><code>menu:
-  home: /
-  categories: /categories
-  archives: /archives
-  tags: /tags
-</code></pre></li>
-<li><p>但是这样部署之后，在分类页面还是看不到任何分类的，同时官方的next教程中并没有写。。<br>其实为文章添加分类关联的教程已经在hexo教程给出了。。<br>下面仅仅做个简单的介绍，全面的教程参照<a href="https://hexo.io/zh-cn/docs/front-matter.html#分类和标签" target="_blank" rel="external">hexo官方教程(需备梯子)</a></p>
-</li>
-</ol>
-<h4 id="添加文章分类关联"><a href="#添加文章分类关联" class="headerlink" title="添加文章分类关联"></a>添加文章分类关联</h4><ol>
-<li><p>hexo中有Front-matter这个概念，是文件最上方以 — 分隔的区域，用于指定个别文件的变量。举个栗子，在hexo new post article时会生成article.md文件，文件生成好的文章属性。</p>
-<pre><code>---
-title: hexo next 为文章添加分类
-date: 2016-03-16 08:12:43
-tags:
----
-</code></pre></li>
-<li><p>在其中添加categories属性，再部署之后就可以在分类页看到分类了</p>
-<pre><code>---
-title: hexo next 为文章添加分类
-date: 2016-03-16 08:12:43
-tags:
-categories: 前端
---- 
-</code></pre></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1779,7 +1742,7 @@ categories: 前端
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1787,7 +1750,7 @@ categories: 前端
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1796,7 +1759,7 @@ categories: 前端
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
